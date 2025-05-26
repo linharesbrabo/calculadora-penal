@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Penal - Polícia Federal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- FontAwesome removido -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,39 +20,39 @@
             <div class="form-section">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="nome-acusado"><i class="fas fa-user"></i> Nome do Acusado*:</label>
+                        <label for="nome-acusado">👤 Nome do Acusado*:</label>
                         <input type="text" id="nome-acusado" placeholder="Digite o nome do acusado" required>
                     </div>
                     <div class="form-group">
-                        <label for="id-acusado"><i class="fas fa-id-card"></i> ID do Acusado*:</label>
+                        <label for="id-acusado">🆔 ID do Acusado*:</label>
                         <input type="text" id="id-acusado" placeholder="Digite o ID do acusado" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="nome-responsavel"><i class="fas fa-user-shield"></i> Nome do Responsável*:</label>
+                        <label for="nome-responsavel">👮 Nome do Responsável*:</label>
                         <input type="text" id="nome-responsavel" placeholder="Digite o nome do responsável pela prisão" required>
                     </div>
                     <div class="form-group">
-                        <label for="id-responsavel"><i class="fas fa-id-badge"></i> ID do Responsável*:</label>
+                        <label for="id-responsavel">📛 ID do Responsável*:</label>
                         <input type="text" id="id-responsavel" placeholder="Digite o ID do responsável pela prisão" required>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="auxiliares"><i class="fas fa-users"></i> Auxiliares*:</label>
-                    <input type="text" id="auxiliares" placeholder="Digite o nome e ID dos auxiliares (Ex: João #1234, Maria #5678)" required>
+                    <label for="auxiliares">👥 Auxiliares:</label> <!-- Removido asterisco de obrigatório -->
+                    <input type="text" id="auxiliares" placeholder="Digite o nome e ID dos auxiliares (Ex: João #1234, Maria #5678)">
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="descricao-qru"><i class="fas fa-file-alt"></i> Descrição da QRU:</label>
-                    <textarea id="descricao-qru" placeholder="Digite a descrição detalhada da QRU" maxlength="1000" rows="5"></textarea>
-                    <div class="char-counter"><span id="char-count">0</span>/1000 caracteres</div>
+                    <label for="descricao-qru">📝 Descrição da QRU:</label>
+                    <textarea id="descricao-qru" placeholder="Digite a descrição detalhada da QRU" maxlength="2000" rows="5"></textarea>
+                    <div class="char-counter"><span id="char-count">0</span>/2000 caracteres</div>
                 </div>
 
                 <div class="form-group checkbox-group">
-                    <label><i class="fas fa-money-bill-wave"></i> Fiança Paga:</label>
+                    <label>💵 Fiança Paga:</label>
                     <div class="checkbox-wrapper">
                         <input type="checkbox" id="fianca-paga">
                         <label for="fianca-paga">Sim</label>
@@ -61,11 +61,11 @@
             </div>
 
             <div class="crimes-section">
-                <h2><i class="fas fa-balance-scale"></i> Selecionar Crimes</h2>
+                <h2>⚖️ Selecionar Crimes</h2>
                 
                 <div class="search-container">
                     <input type="text" id="pesquisar-crimes" placeholder="Pesquisar crimes...">
-                    <i class="fas fa-search search-icon"></i>
+                    <span class="search-icon">🔍</span> <!-- Span em vez de i -->
                 </div>
 
                 <div class="tabs-container">
@@ -79,48 +79,62 @@
                         <button class="tab-btn" data-category="mulher">Contra Mulher</button>
                     </div>
                     
-                    <div class="crimes-list-container">
-                        <ul id="crimes-list" class="crimes-list">
-                            <!-- Crimes serão carregados dinamicamente via JavaScript -->
-                        </ul>
+                    <!-- Container para as duas listas de crimes -->
+                    <div class="crimes-selection-area">
+                        <div class="crimes-list-container main-list">
+                            <div class="category-header general-header" id="general-crime-header">Todos os Crimes</div>
+                            <ul id="crimes-list" class="crimes-list">
+                                <!-- Crimes serão carregados dinamicamente via JavaScript -->
+                            </ul>
+                        </div>
+                        
+                        <!-- Nova seção para crimes selecionados -->
+                        <div class="crimes-list-container selected-list">
+                            <div class="category-header">CRIMES SELECIONADOS</div>
+                            <ul id="crimes-selecionados-list" class="crimes-list">
+                                <!-- Crimes selecionados serão adicionados aqui -->
+                                <li class="empty-selected-state">Nenhum crime selecionado.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
                 <div class="atenuantes-section">
-                    <h3><i class="fas fa-gavel"></i> Atenuantes - Agravante</h3>
+                    <h3>⚖️ Atenuantes/Agravantes</h3> <!-- Título ajustado -->
                     <ul id="atenuantes-list" class="atenuantes-list">
-                        <!-- Atenuantes serão carregados dinamicamente via JavaScript -->
+                        <!-- Atenuantes/Agravantes serão carregados dinamicamente via JavaScript -->
                     </ul>
                 </div>
 
                 <div class="action-buttons">
-                    <button id="calcular-pena" class="btn primary-btn"><i class="fas fa-calculator"></i> Calcular Pena</button>
+                    <button id="calcular-pena" class="btn primary-btn">🧮 Calcular Pena</button>
                 </div>
             </div>
 
             <div class="resultado-section">
                 <div class="resultado-header">
-                    <h2><i class="fas fa-file-contract"></i> Ficha Criminal</h2>
+                    <h2>📄 Ficha Criminal</h2>
                     <div class="resultado-buttons">
-                        <button id="copiar-resultado" class="btn secondary-btn"><i class="fas fa-copy"></i> Copiar</button>
-                        <button id="limpar-resultado" class="btn secondary-btn"><i class="fas fa-trash-alt"></i> Limpar</button>
+                        <button id="copiar-resultado" class="btn secondary-btn">📋 Copiar</button>
+                        <button id="limpar-resultado" class="btn secondary-btn">🗑️ Limpar</button>
                     </div>
                 </div>
                 <div id="resultado-ficha" class="resultado-content">
                     <ul id="detalhes-ficha">
-                        <li><i class="fas fa-user"></i> Nome do Acusado: Não informado</li>
-                        <li><i class="fas fa-id-card"></i> ID do Acusado: Não informado</li>
-                        <li><i class="fas fa-user-shield"></i> Responsável pela Prisão: Não informado</li>
-                        <li><i class="fas fa-clock"></i> Total da Pena: 0 meses</li>
-                        <li><i class="fas fa-chart-line"></i> Redução Aplicada: 0%</li>
-                        <li><i class="fas fa-calendar-alt"></i> Total da Pena Reduzida: 0 meses</li>
-                        <li><i class="fas fa-info-circle"></i> Pena reduzida pelo(s) motivo(s): Nenhum</li>
-                        <li><i class="fas fa-money-bill-wave"></i> Total de Multa: R$ 0</li>
-                        <li><i class="fas fa-hand-holding-usd"></i> Valor da Fiança Total: R$ 0</li>
-                        <li><i class="fas fa-money-check"></i> Fiança Paga: Não</li>
-                        <li><i class="fas fa-balance-scale"></i> Crimes Cometidos: Nenhum</li>
-                        <li><i class="fas fa-users"></i> Auxiliares: Não informado</li>
-                        <li><i class="fas fa-file-alt"></i> Descrição QRU: Não informado</li>
+                        <!-- Conteúdo gerado via JS -->
+                        <li>👤 Nome do Acusado: Não informado</li>
+                        <li>🆔 ID do Acusado: Não informado</li>
+                        <li>👮 Responsável pela Prisão: Não informado</li>
+                        <li>👥 Auxiliares: Não informado</li>
+                        <li>📝 Descrição QRU: Não informado</li>
+                        <li>⚖️ Crimes Cometidos: Nenhum</li>
+                        <li>⏰ Pena Base Total: 0 meses</li>
+                        <li>ℹ️ Atenuantes/Agravantes Aplicados: Nenhum</li>
+                        <li>🧮 Modificador Total: 0%</li>
+                        <li>📅 Pena Final Aplicada: 0 meses</li>
+                        <li>💵 Multa Total (Base): R$ 0</li>
+                        <li>💰 Valor da Fiança (Base): R$ 0</li>
+                        <li>❌ Fiança Paga: Não</li>
                     </ul>
                 </div>
             </div>
@@ -134,3 +148,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+

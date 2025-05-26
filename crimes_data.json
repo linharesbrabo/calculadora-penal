@@ -836,8 +836,8 @@
         "tempo": "20 MESES",
         "meses": 20,
         "observacoes": "Praticar, induzir ou incitar discriminação ou preconceito contra mulher em razão de seu gênero. Inclui tratamento desigual, humilhações públicas baseadas em gênero, e negação de oportunidades por ser mulher. Ex. “Mulher não presta para ser polícia”",
-        "fianca": "40.000 + JULGAMENTO",
-        "valor_fianca": 40
+        "fianca": "40000",
+        "valor_fianca": 40000
       },
       {
         "codigo": "ART. 082",
@@ -846,8 +846,8 @@
         "tempo": "20 MESES",
         "meses": 20,
         "observacoes": "Causar dano emocional à mulher, diminuição de autoestima, prejudicar seu desenvolvimento ou perturbar seu pleno exercício de autodeterminação. Inclui ameaças, constrangimento, humilhação, manipulação, isolamento, e vigilância constante.",
-        "fianca": "50.000 + JULGAMENTO",
-        "valor_fianca": 50
+        "fianca": "50000",
+        "valor_fianca": 50000
       },
       {
         "codigo": "ART. 083",
@@ -856,8 +856,8 @@
         "tempo": "35 MESES",
         "meses": 35,
         "observacoes": "Divulgar, publicar ou compartilhar, por qualquer meio, conteúdo íntimo de mulher sem seu consentimento. Inclui fotos, vídeos, áudios ou qualquer registro de natureza íntima.",
-        "fianca": "50.000 + JULGAMENTO",
-        "valor_fianca": 50
+        "fianca": "60000",
+        "valor_fianca": 60000
       },
       {
         "codigo": "ART. 084",
@@ -876,8 +876,8 @@
         "tempo": "35 MESES",
         "meses": 35,
         "observacoes": "Expor mulher a situações humilhantes e constrangedoras, de forma repetitiva e prolongada, durante o exercício de suas funções ou em ambiente social.",
-        "fianca": "50.000 + JULGAMENTO",
-        "valor_fianca": 50
+        "fianca": "50000",
+        "valor_fianca": 50000
       },
       {
         "codigo": "ART. 086",
