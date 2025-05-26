@@ -1,0 +1,544 @@
+:root {
+    --primary-color: #003366;
+    --secondary-color: #0056b3;
+    --accent-color: #ffc107;
+    --text-color: #333;
+    --light-text: #fff;
+    --border-color: #ddd;
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --background-color: #f8f9fa;
+    --card-background: #fff;
+    --hover-color: #e9ecef;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--light-text);
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    height: 80px;
+    margin-right: 20px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Main Content Styles */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* Form Section Styles */
+.form-section {
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 15px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Crimes Section Styles */
+.crimes-section {
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.crimes-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+}
+
+.search-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.tabs-container {
+    margin-bottom: 20px;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    padding: 8px 15px;
+    background: none;
+    border: none;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover {
+    background-color: var(--hover-color);
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+}
+
+.crimes-list-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+}
+
+.crimes-list {
+    list-style: none;
+}
+
+.crimes-list li {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    transition: background-color 0.3s;
+}
+
+.crimes-list li:last-child {
+    border-bottom: none;
+}
+
+.crimes-list li:hover {
+    background-color: var(--hover-color);
+}
+
+.crimes-list li input[type="checkbox"] {
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.crimes-list .crime-info {
+    flex: 1;
+}
+
+.crimes-list .crime-title {
+    font-weight: 600;
+}
+
+.crimes-list .crime-details {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Quantidade Input Styles */
+.quantidade-input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    background-color: #f0f8ff;
+    border-radius: 5px;
+    border: 1px solid #cce5ff;
+    display: flex;
+    flex-direction: column;
+}
+
+.quantidade-input label {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    color: var(--secondary-color);
+}
+
+.quantidade-input input {
+    width: 100%;
+    padding: 5px 10px;
+    border: 1px solid #cce5ff;
+    border-radius: 3px;
+}
+
+.atenuantes-section {
+    margin-top: 20px;
+}
+
+.atenuantes-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.atenuantes-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.atenuantes-list li {
+    padding: 8px 15px;
+    background-color: var(--hover-color);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.atenuantes-list li input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Resultado Section Styles */
+.resultado-section {
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resultado-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+}
+
+.resultado-header h2 {
+    color: var(--primary-color);
+}
+
+.resultado-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.resultado-content {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+}
+
+#detalhes-ficha {
+    list-style: none;
+}
+
+#detalhes-ficha li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#detalhes-ficha li:last-child {
+    border-bottom: none;
+}
+
+#detalhes-ficha li i {
+    margin-right: 10px;
+    color: var(--primary-color);
+}
+
+/* Button Styles */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+}
+
+.primary-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.secondary-btn {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+}
+
+.secondary-btn:hover {
+    background-color: #e0a800;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 15px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .logo-container {
+        flex-direction: column;
+    }
+    
+    .logo {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .resultado-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .resultado-buttons {
+        margin-top: 10px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* Required Field Indicator */
+label[for]::after {
+    content: attr(for);
+    display: none;
+}
+
+label[for="nome-acusado"]::after,
+label[for="id-acusado"]::after,
+label[for="nome-responsavel"]::after,
+label[for="id-responsavel"]::after,
+label[for="auxiliares"]::after {
+    content: "*";
+    color: var(--error-color);
+    margin-left: 4px;
+}
+
+/* Highlight Selected Crimes */
+.crimes-list li.selected {
+    background-color: rgba(0, 86, 179, 0.1);
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: var(--light-text);
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.success {
+    background-color: var(--success-color);
+}
+
+.toast.error {
+    background-color: var(--error-color);
+}
+
+/* Category Headers */
+.category-header {
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    font-weight: 600;
+    border-radius: 5px 5px 0 0;
+    margin-top: 10px;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: var(--border-color);
+}

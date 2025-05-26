@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Penal - Polícia Federal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="Logo Polícia Federal" class="logo">
+                <h1>CALCULADORA PENAL</h1>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="form-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome-acusado"><i class="fas fa-user"></i> Nome do Acusado*:</label>
+                        <input type="text" id="nome-acusado" placeholder="Digite o nome do acusado" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-acusado"><i class="fas fa-id-card"></i> ID do Acusado*:</label>
+                        <input type="text" id="id-acusado" placeholder="Digite o ID do acusado" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome-responsavel"><i class="fas fa-user-shield"></i> Nome do Responsável*:</label>
+                        <input type="text" id="nome-responsavel" placeholder="Digite o nome do responsável pela prisão" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-responsavel"><i class="fas fa-id-badge"></i> ID do Responsável*:</label>
+                        <input type="text" id="id-responsavel" placeholder="Digite o ID do responsável pela prisão" required>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="auxiliares"><i class="fas fa-users"></i> Auxiliares*:</label>
+                    <input type="text" id="auxiliares" placeholder="Digite o nome e ID dos auxiliares (Ex: João #1234, Maria #5678)" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="descricao-qru"><i class="fas fa-file-alt"></i> Descrição da QRU:</label>
+                    <textarea id="descricao-qru" placeholder="Digite a descrição detalhada da QRU" maxlength="1000" rows="5"></textarea>
+                    <div class="char-counter"><span id="char-count">0</span>/1000 caracteres</div>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label><i class="fas fa-money-bill-wave"></i> Fiança Paga:</label>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="fianca-paga">
+                        <label for="fianca-paga">Sim</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crimes-section">
+                <h2><i class="fas fa-balance-scale"></i> Selecionar Crimes</h2>
+                
+                <div class="search-container">
+                    <input type="text" id="pesquisar-crimes" placeholder="Pesquisar crimes...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+
+                <div class="tabs-container">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-category="todos">Todos</button>
+                        <button class="tab-btn" data-category="transito">Trânsito</button>
+                        <button class="tab-btn" data-category="paz">Paz Pública</button>
+                        <button class="tab-btn" data-category="patrimonio">Patrimônio</button>
+                        <button class="tab-btn" data-category="administracao">Administração</button>
+                        <button class="tab-btn" data-category="pessoa">Pessoa</button>
+                        <button class="tab-btn" data-category="mulher">Contra Mulher</button>
+                    </div>
+                    
+                    <div class="crimes-list-container">
+                        <ul id="crimes-list" class="crimes-list">
+                            <!-- Crimes serão carregados dinamicamente via JavaScript -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="atenuantes-section">
+                    <h3><i class="fas fa-gavel"></i> Atenuantes - Agravante</h3>
+                    <ul id="atenuantes-list" class="atenuantes-list">
+                        <!-- Atenuantes serão carregados dinamicamente via JavaScript -->
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="calcular-pena" class="btn primary-btn"><i class="fas fa-calculator"></i> Calcular Pena</button>
+                </div>
+            </div>
+
+            <div class="resultado-section">
+                <div class="resultado-header">
+                    <h2><i class="fas fa-file-contract"></i> Ficha Criminal</h2>
+                    <div class="resultado-buttons">
+                        <button id="copiar-resultado" class="btn secondary-btn"><i class="fas fa-copy"></i> Copiar</button>
+                        <button id="limpar-resultado" class="btn secondary-btn"><i class="fas fa-trash-alt"></i> Limpar</button>
+                    </div>
+                </div>
+                <div id="resultado-ficha" class="resultado-content">
+                    <ul id="detalhes-ficha">
+                        <li><i class="fas fa-user"></i> Nome do Acusado: Não informado</li>
+                        <li><i class="fas fa-id-card"></i> ID do Acusado: Não informado</li>
+                        <li><i class="fas fa-user-shield"></i> Responsável pela Prisão: Não informado</li>
+                        <li><i class="fas fa-clock"></i> Total da Pena: 0 meses</li>
+                        <li><i class="fas fa-chart-line"></i> Redução Aplicada: 0%</li>
+                        <li><i class="fas fa-calendar-alt"></i> Total da Pena Reduzida: 0 meses</li>
+                        <li><i class="fas fa-info-circle"></i> Pena reduzida pelo(s) motivo(s): Nenhum</li>
+                        <li><i class="fas fa-money-bill-wave"></i> Total de Multa: R$ 0</li>
+                        <li><i class="fas fa-hand-holding-usd"></i> Valor da Fiança Total: R$ 0</li>
+                        <li><i class="fas fa-money-check"></i> Fiança Paga: Não</li>
+                        <li><i class="fas fa-balance-scale"></i> Crimes Cometidos: Nenhum</li>
+                        <li><i class="fas fa-users"></i> Auxiliares: Não informado</li>
+                        <li><i class="fas fa-file-alt"></i> Descrição QRU: Não informado</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 Polícia Federal - Linhares Brabo</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
