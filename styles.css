@@ -336,8 +336,8 @@ textarea {
 
 .atenuantes-list {
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 10px;
 }
 
@@ -346,22 +346,37 @@ textarea {
     background-color: var(--hover-color);
     border-radius: 5px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .atenuantes-list li input[type="checkbox"] {
     margin-right: 10px;
+    margin-top: 5px;
 }
 
 .atenuantes-list li label {
     font-size: 0.9rem;
     color: var(--text-color);
+    text-align: left;
 }
 
 .atenuantes-list li label small {
     display: block;
     font-size: 0.8rem;
     color: #555;
+    text-align: left;
+}
+
+/* Estilos específicos para os novos itens AC */
+.atenuantes-list li[data-codigo^="AC"] {
+    grid-column: 1 / -1;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.atenuantes-list li[data-codigo^="AC"] label {
+    text-align: left;
+    width: 100%;
 }
 
 .action-buttons {
@@ -598,4 +613,3 @@ label[for="id-responsavel"]::after {
     margin-bottom: 10px;
     color: var(--border-color);
 }
-

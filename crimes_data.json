@@ -5,7 +5,10 @@
     "patrimonio": "Crimes Contra o Patrimônio",
     "administracao": "Crimes Contra a Administração Pública",
     "pessoa": "Crimes Contra a Pessoa",
-    "mulher": "Crimes Contra a Mulher"
+    "mulher": "Crimes Contra a Mulher",
+    "desacato_abuso": "Desacato e Abuso",
+    "vida_liberdade": "Crimes Contra Vida e Liberdade",
+    "trafico_posse": "Tráfico e Posse Ilegal"
   },
   "crimes": {
     "transito": [
@@ -120,19 +123,51 @@
         "valor_fianca": 0
       },
       {
-        "codigo": "ART. 012",
-        "num_artigo": "012",
-        "crime": "USAR EQUIPAMENTO BALISTICO",
+        "codigo": "ART. 032",
+        "num_artigo": "032",
+        "crime": "MULTAS PENDENTES",
         "tempo": "5 MESES",
         "meses": 5,
+        "observacoes": "MAIS 1 MES À CADA 5.000 DE MULTA",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 034",
+        "num_artigo": "034",
+        "crime": "PLACA CLONADA",
+        "tempo": "10 MESES",
+        "meses": 10,
         "observacoes": "-",
+        "fianca": "25000",
+        "valor_fianca": 25000
+      },
+      {
+        "codigo": "ART. 035",
+        "num_artigo": "035",
+        "crime": "CORRIDA ILEGAL",
+        "tempo": "15 MESES",
+        "meses": 15,
+        "observacoes": "APENAS O MOTORISTA",
         "fianca": "30000",
         "valor_fianca": 30000
       },
       {
-        "codigo": "ART. 013",
-        "num_artigo": "013",
-        "crime": "USAR EQUIPAMENTO POLICIAL",
+        "codigo": "ART. 065",
+        "num_artigo": "065",
+        "crime": "FURTO/ROUBO DE VEÍCULOS",
+        "tempo": "50 MESES",
+        "meses": 50,
+        "observacoes": "-",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      }
+    ],
+    "paz": [
+      {
+        "codigo": "ART. 012",
+        "num_artigo": "012",
+        "crime": "USAR EQUIPAMENTO BALISTICO",
         "tempo": "5 MESES",
         "meses": 5,
         "observacoes": "-",
@@ -150,31 +185,9 @@
         "valor_fianca": 30000
       },
       {
-        "codigo": "ART. 015",
-        "num_artigo": "015",
-        "crime": "RESISTÊNCIA A PRISÃO (FUGIR)",
-        "tempo": "5 MESES",
-        "meses": 5,
-        "observacoes": "AUMENTO DE 10% DA PENA",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      }
-    ],
-    "paz": [
-      {
         "codigo": "ART. 016",
         "num_artigo": "016",
         "crime": "OMISSÃO DE SOCORRO",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "-",
-        "fianca": "40000",
-        "valor_fianca": 40000
-      },
-      {
-        "codigo": "ART. 017",
-        "num_artigo": "017",
-        "crime": "DANO AO PATRIMONIO PÚBLICO",
         "tempo": "10 MESES",
         "meses": 10,
         "observacoes": "-",
@@ -202,16 +215,6 @@
         "valor_fianca": 0
       },
       {
-        "codigo": "ART. 020",
-        "num_artigo": "020",
-        "crime": "FURTO",
-        "tempo": "15 MESES",
-        "meses": 15,
-        "observacoes": "-",
-        "fianca": "15000",
-        "valor_fianca": 15000
-      },
-      {
         "codigo": "ART. 021",
         "num_artigo": "021",
         "crime": "PORTE DE BALAS EXCEDIDO",
@@ -222,19 +225,181 @@
         "valor_fianca": 0
       },
       {
-        "codigo": "ART. 022",
-        "num_artigo": "022",
-        "crime": "FUGA DA ABORDAGEM POLICIAL",
-        "tempo": "20 MESES",
-        "meses": 20,
+        "codigo": "ART. 030",
+        "num_artigo": "030",
+        "crime": "INVASÃO DE PRIVACIDADE",
+        "tempo": "10 MESES",
+        "meses": 10,
         "observacoes": "-",
-        "fianca": "10000",
-        "valor_fianca": 10000
+        "fianca": "N/T",
+        "valor_fianca": 0
       },
       {
-        "codigo": "ART. 023",
-        "num_artigo": "023",
-        "crime": "TENTATIVA DE SUBORNO",
+        "codigo": "ART. 033",
+        "num_artigo": "033",
+        "crime": "DESORDEM E PERTURBAÇÃO DA PAZ",
+        "tempo": "5 MESES",
+        "meses": 5,
+        "observacoes": "-",
+        "fianca": "20000",
+        "valor_fianca": 20000
+      },
+      {
+        "codigo": "ART. 041",
+        "num_artigo": "041",
+        "crime": "PORTAR ALGEMA",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "MAIS 1 PARA CADA UNIDADE",
+        "fianca": "25000",
+        "valor_fianca": 25000
+      },
+      {
+        "codigo": "ART. 042",
+        "num_artigo": "042",
+        "crime": "PORTAR LOCKPICK",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "PORTANDO 6 OU MAIS | MAIS 1 PARA CADA UNIDADE",
+        "fianca": "25000",
+        "valor_fianca": 25000
+      },
+      {
+        "codigo": "ART. 043",
+        "num_artigo": "043",
+        "crime": "PORTAR MASTERPICK",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "MAIS 1 PARA CADA UNIDADE",
+        "fianca": "25000",
+        "valor_fianca": 25000
+      },
+      {
+        "codigo": "ART. 044",
+        "num_artigo": "044",
+        "crime": "PORTAR PENDRIVE",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "MAIS 1 PARA CADA UNIDADE",
+        "fianca": "25000",
+        "valor_fianca": 25000
+      },
+      {
+        "codigo": "ART. 045",
+        "num_artigo": "045",
+        "crime": "PORTAR KEYCARD",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "MAIS 1 PARA CADA UNIDADE",
+        "fianca": "25000",
+        "valor_fianca": 25000
+      },
+      {
+        "codigo": "ART. 046",
+        "num_artigo": "046",
+        "crime": "PORTAR CAPUZ",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "MAIS 1 PARA CADA UNIDADE",
+        "fianca": "25000",
+        "valor_fianca": 25000
+      },
+      {
+        "codigo": "ART. 047",
+        "num_artigo": "047",
+        "crime": "PORTE ILEGAL DE ARMA LEVE",
+        "tempo": "20 MESES",
+        "meses": 20,
+        "observacoes": "MAIS 10 MESES À CADA ARMA",
+        "fianca": "35000",
+        "valor_fianca": 35000
+      },
+      {
+        "codigo": "ART. 048",
+        "num_artigo": "048",
+        "crime": "ESTELIONATO",
+        "tempo": "30 MESES",
+        "meses": 30,
+        "observacoes": "RÉU DEVERÁ RESPONDER A PROCESSO NO STF",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 049",
+        "num_artigo": "049",
+        "crime": "PORTE ILEGAL DE ARMA PESADA",
+        "tempo": "30 MESES",
+        "meses": 30,
+        "observacoes": "MAIS 10 MESES POR ARMA",
+        "fianca": "45000",
+        "valor_fianca": 45000
+      },
+      {
+        "codigo": "ART. 050",
+        "num_artigo": "050",
+        "crime": "TRÁFICO DE DROGAS (A PARTIR DE 6 UNIDADES)",
+        "tempo": "15 MESES",
+        "meses": 15,
+        "observacoes": "MAIS 2 MESES À CADA 1 UNIDADE",
+        "fianca": "45000",
+        "valor_fianca": 45000
+      },
+      {
+        "codigo": "ART. 052",
+        "num_artigo": "052",
+        "crime": "PORTAR DINHEIRO SUJO",
+        "tempo": "15 MESES",
+        "meses": 15,
+        "observacoes": "MAIS 1 MÊS PARA CADA 5.000 DE DINHEIRO",
+        "fianca": "45000",
+        "valor_fianca": 45000
+      },
+      {
+        "codigo": "ART. 064",
+        "num_artigo": "064",
+        "crime": "PORTE ILEGAL DE ARMA BRANCA",
+        "tempo": "15 MESES",
+        "meses": 15,
+        "observacoes": "MAIS 5 MESES À CADA ARMA",
+        "fianca": "25000",
+        "valor_fianca": 25000
+      },
+      {
+        "codigo": "ART. 069",
+        "num_artigo": "069",
+        "crime": "FORMAÇÃO DE QUADRILHA",
+        "tempo": "60 MESES",
+        "meses": 60,
+        "observacoes": "MAIS 5 MESES PARA CADA PESSOA",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 013",
+        "num_artigo": "013",
+        "crime": "USAR EQUIPAMENTO POLICIAL",
+        "tempo": "5 MESES",
+        "meses": 5,
+        "observacoes": "-",
+        "fianca": "30000",
+        "valor_fianca": 30000
+      }
+    ],
+    "patrimonio": [
+      {
+        "codigo": "ART. 017",
+        "num_artigo": "017",
+        "crime": "DANO AO PATRIMONIO PÚBLICO",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "-",
+        "fianca": "40000",
+        "valor_fianca": 40000
+      },
+      {
+        "codigo": "ART. 020",
+        "num_artigo": "020",
+        "crime": "FURTO",
         "tempo": "15 MESES",
         "meses": 15,
         "observacoes": "-",
@@ -262,36 +427,6 @@
         "valor_fianca": 15000
       },
       {
-        "codigo": "ART. 026",
-        "num_artigo": "026",
-        "crime": "FALSO TESTEMUNHO (PERJÚRIO)",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "-",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 027",
-        "num_artigo": "027",
-        "crime": "OBSTRUÇÃO DE JUSTIÇA",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "-",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 028",
-        "num_artigo": "028",
-        "crime": "DESOBEDIÊNCIA À ORDEM POLICAL",
-        "tempo": "15 MESES",
-        "meses": 15,
-        "observacoes": "-",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
         "codigo": "ART. 029",
         "num_artigo": "029",
         "crime": "APROPRIAÇÃO INDÉBITA",
@@ -302,18 +437,6 @@
         "valor_fianca": 10000
       },
       {
-        "codigo": "ART. 030",
-        "num_artigo": "030",
-        "crime": "INVASÃO DE PRIVACIDADE",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "-",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      }
-    ],
-    "patrimonio": [
-      {
         "codigo": "ART. 031",
         "num_artigo": "031",
         "crime": "VANDALISMO",
@@ -322,46 +445,6 @@
         "observacoes": "DESTRUIR, INUTILIZAR OU DETERIORAR COISA ALHEIA INTENCIONALMENTE.",
         "fianca": "15000",
         "valor_fianca": 15000
-      },
-      {
-        "codigo": "ART. 032",
-        "num_artigo": "032",
-        "crime": "MULTAS PENDENTES",
-        "tempo": "5 MESES",
-        "meses": 5,
-        "observacoes": "MAIS 1 MES À CADA 5.000 DE MULTA",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 033",
-        "num_artigo": "033",
-        "crime": "DESORDEM E PERTURBAÇÃO DA PAZ",
-        "tempo": "5 MESES",
-        "meses": 5,
-        "observacoes": "-",
-        "fianca": "20000",
-        "valor_fianca": 20000
-      },
-      {
-        "codigo": "ART. 034",
-        "num_artigo": "034",
-        "crime": "PLACA CLONADA",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "-",
-        "fianca": "25000",
-        "valor_fianca": 25000
-      },
-      {
-        "codigo": "ART. 035",
-        "num_artigo": "035",
-        "crime": "CORRIDA ILEGAL",
-        "tempo": "15 MESES",
-        "meses": 15,
-        "observacoes": "APENAS O MOTORISTA",
-        "fianca": "30000",
-        "valor_fianca": 30000
       },
       {
         "codigo": "ART. 036",
@@ -414,106 +497,86 @@
         "valor_fianca": 25000
       },
       {
-        "codigo": "ART. 041",
-        "num_artigo": "041",
-        "crime": "PORTAR ALGEMA",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "MAIS 1 PARA CADA UNIDADE",
-        "fianca": "25000",
-        "valor_fianca": 25000
-      },
-      {
-        "codigo": "ART. 042",
-        "num_artigo": "042",
-        "crime": "PORTAR LOCKPICK",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "PORTANDO 6 OU MAIS | MAIS 1 PARA CADA UNIDADE",
-        "fianca": "25000",
-        "valor_fianca": 25000
-      },
-      {
-        "codigo": "ART. 043",
-        "num_artigo": "043",
-        "crime": "PORTAR MASTERPICK",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "MAIS 1 PARA CADA UNIDADE",
-        "fianca": "25000",
-        "valor_fianca": 25000
-      },
-      {
-        "codigo": "ART. 044",
-        "num_artigo": "044",
-        "crime": "PORTAR PENDRIVE",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "MAIS 1 PARA CADA UNIDADE",
-        "fianca": "25000",
-        "valor_fianca": 25000
-      },
-      {
-        "codigo": "ART. 045",
-        "num_artigo": "045",
-        "crime": "PORTAR KEYCARD",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "MAIS 1 PARA CADA UNIDADE",
-        "fianca": "25000",
-        "valor_fianca": 25000
-      }
-    ],
-    "administracao": [
-      {
-        "codigo": "ART. 046",
-        "num_artigo": "046",
-        "crime": "PORTAR CAPUZ",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "MAIS 1 PARA CADA UNIDADE",
-        "fianca": "25000",
-        "valor_fianca": 25000
-      },
-      {
-        "codigo": "ART. 047",
-        "num_artigo": "047",
-        "crime": "PORTE ILEGAL DE ARMA LEVE",
-        "tempo": "20 MESES",
-        "meses": 20,
-        "observacoes": "MAIS 10 MESES À CADA ARMA",
-        "fianca": "35000",
-        "valor_fianca": 35000
-      },
-      {
-        "codigo": "ART. 048",
-        "num_artigo": "048",
-        "crime": "ESTELIONATO",
-        "tempo": "30 MESES",
-        "meses": 30,
-        "observacoes": "RÉU DEVERÁ RESPONDER A PROCESSO NO STF",
+        "codigo": "ART. 073",
+        "num_artigo": "073",
+        "crime": "EXTORSÃO",
+        "tempo": "70 MESES",
+        "meses": 70,
+        "observacoes": "SEM DIREITO A ATENUANTES",
         "fianca": "N/T",
         "valor_fianca": 0
       },
       {
-        "codigo": "ART. 049",
-        "num_artigo": "049",
-        "crime": "PORTE ILEGAL DE ARMA PESADA",
-        "tempo": "30 MESES",
-        "meses": 30,
-        "observacoes": "MAIS 10 MESES POR ARMA",
-        "fianca": "45000",
-        "valor_fianca": 45000
+        "codigo": "ART. 074",
+        "num_artigo": "074",
+        "crime": "ROUBO",
+        "tempo": "50 MESES",
+        "meses": 50,
+        "observacoes": "-",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      }
+    ],
+    "administracao": [
+      {
+        "codigo": "ART. 015",
+        "num_artigo": "015",
+        "crime": "RESISTÊNCIA A PRISÃO (FUGIR)",
+        "tempo": "5 MESES",
+        "meses": 5,
+        "observacoes": "AUMENTO DE 10% DA PENA",
+        "fianca": "N/T",
+        "valor_fianca": 0
       },
       {
-        "codigo": "ART. 050",
-        "num_artigo": "050",
-        "crime": "TRÁFICO DE DROGAS (A PARTIR DE 6 UNIDADES)",
+        "codigo": "ART. 022",
+        "num_artigo": "022",
+        "crime": "FUGA DA ABORDAGEM POLICIAL",
+        "tempo": "20 MESES",
+        "meses": 20,
+        "observacoes": "-",
+        "fianca": "10000",
+        "valor_fianca": 10000
+      },
+      {
+        "codigo": "ART. 023",
+        "num_artigo": "023",
+        "crime": "TENTATIVA DE SUBORNO",
         "tempo": "15 MESES",
         "meses": 15,
-        "observacoes": "MAIS 2 MESES À CADA 1 UNIDADE",
-        "fianca": "45000",
-        "valor_fianca": 45000
+        "observacoes": "-",
+        "fianca": "15000",
+        "valor_fianca": 15000
+      },
+      {
+        "codigo": "ART. 026",
+        "num_artigo": "026",
+        "crime": "FALSO TESTEMUNHO (PERJÚRIO)",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "-",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 027",
+        "num_artigo": "027",
+        "crime": "OBSTRUÇÃO DE JUSTIÇA",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "-",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 028",
+        "num_artigo": "028",
+        "crime": "DESOBEDIÊNCIA À ORDEM POLICAL",
+        "tempo": "15 MESES",
+        "meses": 15,
+        "observacoes": "-",
+        "fianca": "N/T",
+        "valor_fianca": 0
       },
       {
         "codigo": "ART. 051",
@@ -522,19 +585,41 @@
         "tempo": "-",
         "meses": 0,
         "observacoes": "ALERTAR O CIDADÃO E RECOLHER",
-        "fianca": "-",
+        "fianca": "0",
         "valor_fianca": 0
       },
       {
-        "codigo": "ART. 052",
-        "num_artigo": "052",
-        "crime": "PORTAR DINHEIRO SUJO",
-        "tempo": "15 MESES",
-        "meses": 15,
-        "observacoes": "MAIS 1 MÊS PARA CADA 5.000 DE DINHEIRO",
-        "fianca": "45000",
-        "valor_fianca": 45000
+        "codigo": "ART. 061",
+        "num_artigo": "061",
+        "crime": "CORRUPÇÃO ATIVA E PASSIVA",
+        "tempo": "35 MESES",
+        "meses": 35,
+        "observacoes": "EXONERAÇÃO E ADVERTÊNCIA",
+        "fianca": "N/T",
+        "valor_fianca": 0
       },
+      {
+        "codigo": "ART. 068",
+        "num_artigo": "068",
+        "crime": "DESTRUIÇÃO DE EVIDÊNCIA FÍSICA",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "-",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 076",
+        "num_artigo": "076",
+        "crime": "HOMICÍDIO A UM SERVIDOR PÚBLICO",
+        "tempo": "120 MESES",
+        "meses": 120,
+        "observacoes": "SEM DIREITO A ATENUANTES",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      }
+    ],
+    "pessoa": [
       {
         "codigo": "ART. 053",
         "num_artigo": "053",
@@ -566,98 +651,6 @@
         "valor_fianca": 40000
       },
       {
-        "codigo": "ART. 056",
-        "num_artigo": "056",
-        "crime": "ABUSO DE AUTORIDADE",
-        "tempo": "-",
-        "meses": 0,
-        "observacoes": "JULGADO MEDIANTE A UM PROCESSO",
-        "fianca": "-",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 057",
-        "num_artigo": "057",
-        "crime": "DESACATO À AUTORIDADE",
-        "tempo": "120 MESES",
-        "meses": 120,
-        "observacoes": "PERDA DE TODOS OS ATENUANTES",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 058",
-        "num_artigo": "058",
-        "crime": "EXTORÇÃO",
-        "tempo": "70 MESES",
-        "meses": 70,
-        "observacoes": "-",
-        "fianca": "30000",
-        "valor_fianca": 30000
-      },
-      {
-        "codigo": "ART. 059",
-        "num_artigo": "059",
-        "crime": "FALSIDADE IDEOLÓGICA",
-        "tempo": "20 MESES",
-        "meses": 20,
-        "observacoes": "-",
-        "fianca": "30000",
-        "valor_fianca": 30000
-      },
-      {
-        "codigo": "ART. 060",
-        "num_artigo": "060",
-        "crime": "DENUNCIAÇÃO CALUNIOSA",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "-",
-        "fianca": "35000",
-        "valor_fianca": 35000
-      },
-      {
-        "codigo": "ART. 058",
-        "num_artigo": "058",
-        "crime": "HOMICÍDIO SIMPLES",
-        "tempo": "120 MESES",
-        "meses": 120,
-        "observacoes": "SEM DIREITO A ATENUANTES",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 059",
-        "num_artigo": "059",
-        "crime": "HOMICÍDIO QUALIFICADO",
-        "tempo": "120 MESES",
-        "meses": 120,
-        "observacoes": "SEM DIREITO A ATENUANTES",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 060",
-        "num_artigo": "060",
-        "crime": "SEQUESTRO",
-        "tempo": "90 MESES",
-        "meses": 90,
-        "observacoes": "SEM DIREITO A ATENUANTES",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      }
-    ],
-    "pessoa": [
-      {
-        "codigo": "ART. 061",
-        "num_artigo": "061",
-        "crime": "CORRUPÇÃO ATIVA E PASSIVA",
-        "tempo": "35 MESES",
-        "meses": 35,
-        "observacoes": "EXONERAÇÃO E ADVERTÊNCIA",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
         "codigo": "ART. 062",
         "num_artigo": "062",
         "crime": "AMEAÇA",
@@ -676,26 +669,6 @@
         "observacoes": "-",
         "fianca": "30000",
         "valor_fianca": 30000
-      },
-      {
-        "codigo": "ART. 064",
-        "num_artigo": "064",
-        "crime": "PORTE ILEGAL DE ARMA BRANCA",
-        "tempo": "15 MESES",
-        "meses": 15,
-        "observacoes": "MAIS 5 MESES À CADA ARMA",
-        "fianca": "25000",
-        "valor_fianca": 25000
-      },
-      {
-        "codigo": "ART. 065",
-        "num_artigo": "065",
-        "crime": "FURTO/ROUBO DE VEÍCULOS",
-        "tempo": "50 MESES",
-        "meses": 50,
-        "observacoes": "-",
-        "fianca": "N/T",
-        "valor_fianca": 0
       },
       {
         "codigo": "ART. 066",
@@ -718,49 +691,19 @@
         "valor_fianca": 0
       },
       {
-        "codigo": "ART. 068",
-        "num_artigo": "068",
-        "crime": "DESTRUIÇÃO DE EVIDÊNCIA FÍSICA",
-        "tempo": "10 MESES",
-        "meses": 10,
-        "observacoes": "-",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 069",
-        "num_artigo": "069",
-        "crime": "FORMAÇÃO DE QUADRILHA",
-        "tempo": "60 MESES",
-        "meses": 60,
-        "observacoes": "MAIS 5 MESES PARA CADA PESSOA",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 061",
-        "num_artigo": "061",
-        "crime": "EXTORSÃO",
-        "tempo": "70 MESES",
-        "meses": 70,
+        "codigo": "ART. 070",
+        "num_artigo": "070",
+        "crime": "HOMICÍDIO CULPOSO (SEM INTENÇÃO DE MATAR)",
+        "tempo": "90 MESES",
+        "meses": 90,
         "observacoes": "SEM DIREITO A ATENUANTES",
         "fianca": "N/T",
         "valor_fianca": 0
       },
       {
-        "codigo": "ART. 062",
-        "num_artigo": "062",
-        "crime": "ROUBO",
-        "tempo": "50 MESES",
-        "meses": 50,
-        "observacoes": "-",
-        "fianca": "N/T",
-        "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 075",
-        "num_artigo": "075",
-        "crime": "FEMINICÍDIO",
+        "codigo": "ART. 071",
+        "num_artigo": "071",
+        "crime": "HOMICÍDIO DOLOSO (COM INTENÇÃO DE MATAR)",
         "tempo": "120 MESES",
         "meses": 120,
         "observacoes": "SEM DIREITO A ATENUANTES",
@@ -768,27 +711,27 @@
         "valor_fianca": 0
       },
       {
-        "codigo": "ART. 076",
-        "num_artigo": "076",
-        "crime": "HOMICÍDIO A UM SERVIDOR PÚBLICO",
-        "tempo": "120 MESES",
-        "meses": 120,
+        "codigo": "ART. 072",
+        "num_artigo": "072",
+        "crime": "SEQUESTRO",
+        "tempo": "90 MESES",
+        "meses": 90,
         "observacoes": "SEM DIREITO A ATENUANTES",
         "fianca": "N/T",
         "valor_fianca": 0
-      },
-      {
-        "codigo": "ART. 075",
-        "num_artigo": "075",
-        "crime": "FEMINICÍDIO",
-        "tempo": "120 MESES",
-        "meses": 120,
-        "observacoes": "SEM DIREITO A ATENUANTES",
-        "fianca": "50.000 + JULGAMENTO",
-        "valor_fianca": 50
       }
     ],
     "mulher": [
+      {
+        "codigo": "ART. 075",
+        "num_artigo": "075",
+        "crime": "FEMINICÍDIO",
+        "tempo": "120 MESES",
+        "meses": 120,
+        "observacoes": "SEM DIREITO A ATENUANTES",
+        "fianca": "50000",
+        "valor_fianca": 50000
+      },
       {
         "codigo": "ART. 077",
         "num_artigo": "077",
@@ -796,8 +739,8 @@
         "tempo": "30 MESES",
         "meses": 30,
         "observacoes": "Praticar violência física, psicológica ou patrimonial contra mulher em ambiente doméstico ou em relação de convivência.",
-        "fianca": "50.000 + JULGAMENTO",
-        "valor_fianca": 50
+        "fianca": "50000",
+        "valor_fianca": 50000
       },
       {
         "codigo": "ART. 078",
@@ -806,8 +749,8 @@
         "tempo": "50 MESES",
         "meses": 50,
         "observacoes": "Praticar contra mulher, sem sua anuência, ato libidinoso com o objetivo de satisfazer desejo próprio ou de outrem. Inclui toques não consentidos, perseguição com conotação sexual, e abordagens invasivas.",
-        "fianca": "60.000 + JULGAMENTO",
-        "valor_fianca": 60
+        "fianca": "60000",
+        "valor_fianca": 60000
       },
       {
         "codigo": "ART. 079",
@@ -816,8 +759,8 @@
         "tempo": "50 MESES",
         "meses": 50,
         "observacoes": "Perseguir mulher de forma reiterada, por qualquer meio, ameaçando sua integridade física ou psicológica. Inclui monitorar movimentos, e enviar mensagens insistentes.",
-        "fianca": "50.000 + JULGAMENTO",
-        "valor_fianca": 50
+        "fianca": "50000",
+        "valor_fianca": 50000
       },
       {
         "codigo": "ART. 080",
@@ -826,8 +769,8 @@
         "tempo": "15 MESES",
         "meses": 15,
         "observacoes": "Reter, subtrair ou destruir objetos. REQUER RESTITUIÇÃO DOS BENS OU VALOR EQUIVALENTE",
-        "fianca": "40.000 + JULGAMENTO",
-        "valor_fianca": 40
+        "fianca": "40000",
+        "valor_fianca": 40000
       },
       {
         "codigo": "ART. 081",
@@ -856,8 +799,8 @@
         "tempo": "35 MESES",
         "meses": 35,
         "observacoes": "Divulgar, publicar ou compartilhar, por qualquer meio, conteúdo íntimo de mulher sem seu consentimento. Inclui fotos, vídeos, áudios ou qualquer registro de natureza íntima.",
-        "fianca": "60000",
-        "valor_fianca": 60000
+        "fianca": "50000",
+        "valor_fianca": 50000
       },
       {
         "codigo": "ART. 084",
@@ -888,6 +831,112 @@
         "observacoes": "Tentar matar mulher por razões da condição de sexo feminino, quando o crime envolve violência doméstica e familiar, menosprezo ou discriminação à condição de mulher.",
         "fianca": "N/T",
         "valor_fianca": 0
+      }
+    ],
+    "desacato_abuso": [
+      {
+        "codigo": "ART. 056",
+        "num_artigo": "056",
+        "crime": "ABUSO DE AUTORIDADE",
+        "tempo": "-",
+        "meses": 0,
+        "observacoes": "JULGADO MEDIANTE A UM PROCESSO",
+        "fianca": "0",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 057",
+        "num_artigo": "057",
+        "crime": "DESACATO À AUTORIDADE",
+        "tempo": "120 MESES",
+        "meses": 120,
+        "observacoes": "PERDA DE TODOS OS ATENUANTES",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 059",
+        "num_artigo": "059",
+        "crime": "FALSIDADE IDEOLÓGICA",
+        "tempo": "20 MESES",
+        "meses": 20,
+        "observacoes": "-",
+        "fianca": "30000",
+        "valor_fianca": 30000
+      },
+      {
+        "codigo": "ART. 060",
+        "num_artigo": "060",
+        "crime": "DENUNCIAÇÃO CALUNIOSA",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "-",
+        "fianca": "35000",
+        "valor_fianca": 35000
+      },
+      {
+        "codigo": "ART. 058",
+        "num_artigo": "058",
+        "crime": "EXTORÇÃO",
+        "tempo": "70 MESES",
+        "meses": 70,
+        "observacoes": "-",
+        "fianca": "30000",
+        "valor_fianca": 30000
+      }
+    ],
+    "vida_liberdade": [
+      {
+        "codigo": "ART. 059",
+        "num_artigo": "059",
+        "crime": "FALSIDADE IDEOLÓGICA",
+        "tempo": "20 MESES",
+        "meses": 20,
+        "observacoes": "-",
+        "fianca": "30000",
+        "valor_fianca": 30000
+      },
+      {
+        "codigo": "ART. 060",
+        "num_artigo": "060",
+        "crime": "DENUNCIAÇÃO CALUNIOSA",
+        "tempo": "10 MESES",
+        "meses": 10,
+        "observacoes": "-",
+        "fianca": "35000",
+        "valor_fianca": 35000
+      },
+      {
+        "codigo": "ART. 058",
+        "num_artigo": "058",
+        "crime": "EXTORÇÃO",
+        "tempo": "70 MESES",
+        "meses": 70,
+        "observacoes": "-",
+        "fianca": "30000",
+        "valor_fianca": 30000
+      }
+    ],
+    "trafico_posse": [
+      {
+        "codigo": "ART. 021",
+        "num_artigo": "021",
+        "crime": "PORTE DE BALAS EXCEDIDO",
+        "tempo": "-",
+        "meses": 0,
+        "observacoes": "MAIS 1.000 A CADA 10 BALAS EXCEDIDAS | CABÍVEL FIANÇA",
+        "fianca": "N/T",
+        "valor_fianca": 0
+      },
+      {
+        "codigo": "ART. 064",
+        "num_artigo": "064",
+        "crime": "PORTE ILEGAL DE ARMA BRANCA",
+        "tempo": "15 MESES",
+        "meses": 15,
+        "observacoes": "MAIS 5 MESES À CADA ARMA",
+        "fianca": "25000",
+        "valor_fianca": 25000
       }
     ]
   },
@@ -931,6 +980,16 @@
       "codigo": "RAA Nº08",
       "descricao": "DESACATO",
       "reducao": "AUMENTO DE 50% DA PENA TOTAL"
+    },
+    {
+      "codigo": "AC Nº02",
+      "descricao": "CIDADÃOS QUE REALIZAM FUGA DE UMA ABORDAGEM POLICIAL, SEM ILÍCITO E MULTAS PENDENTES, SERÃO PRESOS POR PENA MÁXIMA",
+      "reducao": "CIDADÃOS QUE REALIZAM FUGA DE UMA ABORDAGEM POLICIAL, SEM ILÍCITO E MULTAS PENDENTES, SERÃO PRESOS POR PENA MÁXIMA"
+    },
+    {
+      "codigo": "AC Nº03",
+      "descricao": "RECUSAR-SE A ABRIR PORTA MALAS ACARRETA EM ACUSAÇÃO DE DESOBEDIÊNCIA À ORDEM POLICIAL",
+      "reducao": "RECUSAR-SE A ABRIR PORTA MALAS ACARRETA EM ACUSAÇÃO DE DESOBEDIÊNCIA À ORDEM POLICIAL"
     }
   ]
 }
