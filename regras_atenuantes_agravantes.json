@@ -1,12 +1,54 @@
 {
-    "RAA Nº01": "50% DA PENA DIMINUÍDA SE RÉU PRIMÁRIO. SE REINCIDENTE REDUZ A PENA EM 30 %",
-    "RAA Nº02": "10% DA REDUÇÃO DA PENA TOTAL. SEM A PRESENÇA DE UM ADVOGADO",
-    "RAA Nº03": "REDUÇÃO DE 10% DA PENA TOTAL. SEM A PRESENÇA DE UM ADVOGADO",
-    "RAA Nº04": "AUMENTO DE 30% DA PENA TOTAL",
-    "RAA Nº05": "AUMENTO DE 20% DA PENA TOTAL",
-    "RAA Nº06": "SERÁ PRESO POR 50% DA PENA TOTAL DO RÉU",
-    "RAA Nº07": "AUMENTO DE 50% DA PENA TOTAL",
-    "RAA Nº08": "AUMENTO DE 50% DA PENA TOTAL",
-    "AC Nº02": "CIDADÃOS QUE REALIZAM FUGA DE UMA ABORDAGEM POLICIAL, SEM ILÍCITO E MULTAS PENDENTES, SERÃO PRESOS POR PENA MÁXIMA",
-    "AC Nº03": "RECUSAR-SE A ABRIR PORTA MALAS ACARRETA EM ACUSAÇÃO DE DESOBEDIÊNCIA À ORDEM POLICIAL"
+  "atenuantes": [
+    {
+      "codigo": "RAA Nº01",
+      "descricao": "Réu Primário",
+      "reducao": "50% DA PENA DIMINUÍDA SE RÉU PRIMÁRIO. SE REINCIDENTE REDUZ A PENA EM 30 %"
+    },
+    {
+      "codigo": "RAA Nº02",
+      "descricao": "Sem Advogado (Redução 10%)",
+      "reducao": "10% DA REDUÇÃO DA PENA TOTAL. SEM A PRESENÇA DE UM ADVOGADO"
+    },
+    {
+      "codigo": "RAA Nº03",
+      "descricao": "Sem Advogado (Redução 10%)",
+      "reducao": "REDUÇÃO DE 10% DA PENA TOTAL. SEM A PRESENÇA DE UM ADVOGADO"
+    },
+    {
+      "codigo": "RAA Nº04",
+      "descricao": "Aumento de 30%",
+      "aumento": "AUMENTO DE 30% DA PENA TOTAL"
+    },
+    {
+      "codigo": "RAA Nº05",
+      "descricao": "Aumento de 20%",
+      "aumento": "AUMENTO DE 20% DA PENA TOTAL"
+    },
+    {
+      "codigo": "RAA Nº06",
+      "descricao": "Cúmplice (50% da pena)",
+      "aumento": "SERÁ PRESO POR 50% DA PENA TOTAL DO RÉU"
+    },
+    {
+      "codigo": "RAA Nº07",
+      "descricao": "Aumento de 50%",
+      "aumento": "AUMENTO DE 50% DA PENA TOTAL"
+    },
+    {
+      "codigo": "RAA Nº08",
+      "descricao": "Aumento de 50%",
+      "aumento": "AUMENTO DE 50% DA PENA TOTAL"
+    },
+    {
+      "codigo": "AC Nº02",
+      "descricao": "Fuga de Abordagem (Pena Máxima)",
+      "aumento": "CIDADÃOS QUE REALIZAM FUGA DE UMA ABORDAGEM POLICIAL, SEM ILÍCITO E MULTAS PENDENTES, SERÃO PRESOS POR PENA MÁXIMA"
+    },
+    {
+      "codigo": "AC Nº03",
+      "descricao": "Recusa a Abrir Porta-Malas",
+      "aumento": "RECUSAR-SE A ABRIR PORTA MALAS ACARRETA EM ACUSAÇÃO DE DESOBEDIÊNCIA À ORDEM POLICIAL"
+    }
+  ]
 }
