@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(([crimes, regras]) => {
         crimesData = crimes;
         regrasAtenuantesAgravantes = regras;
+        console.log("Dados carregados:", crimesData);
         console.log("Regras carregadas:", regrasAtenuantesAgravantes); // Log para depuração
         inicializarCalculadora();
     })
@@ -71,66 +72,68 @@ function verificarCrimeComQuantidade(observacoes) {
 
     const termos = [
         "unidade", "cada", "por", "à cada", "para cada", "acima",
-        "mais", "por arma", "por vitima", "por pessoa"
+        "mais", "por arma", "por vitima", "por pessoa", "de multa", "de dinheiro"
     ];
 
     const obsLower = observacoes.toLowerCase();
     return termos.some(termo => obsLower.includes(termo));
 }
 
-// Extrair regra de quantidade do texto de observações
+// Extrair regra de quantidade do texto de observações (REVISADO)
 function extrairRegraQuantidade(observacoes) {
     if (!observacoes) return null;
 
     const obsLower = observacoes.toLowerCase();
 
-    // Padrões comuns para extração de regras
+    // Padrões comuns para extração de regras (prioridade maior para padrões mais específicos)
     const padroes = [
-        // Mais X para cada unidade
+        // Mais X mês(es) para cada Y de dinheiro/multa
         {
-            regex: /mais\s+(\d+)(?:\s+mês|\s+meses)?\s+(?:para cada|à cada|por|a cada)\s+(\d+)?\s*(?:unidade|unidades)?/i,
-            processar: (matches) => {
-                return {
-                    acrescimo: parseInt(matches[1]) || 0,
-                    porQuantidade: parseInt(matches[2]) || 1,
-                    tipo: "unidade"
-                };
-            }
+            regex: /mais\s+(\d+)(?:\s+mês|\s+meses)?\s+(?:para cada|à cada|por)\s+(\d+(?:\.\d+)?)\s+de\s+(?:dinheiro|multa)/i,
+            processar: (matches) => ({
+                acrescimo: parseInt(matches[1]) || 0,
+                porQuantidade: parseInt(matches[2].replace(/\./g, "")) || 1,
+                tipo: "dinheiro"
+            })
         },
-        // Mais X meses por arma/vítima/pessoa
+        // Mais X mês(es) à cada Y unidades (com base inicial)
         {
-            regex: /mais\s+(\d+)(?:\s+mês|\s+meses)?\s+(?:por|para cada|à cada)\s+(?:arma|vitima|pessoa|vítima|orgão|órgão)/i,
-            processar: (matches) => {
-                return {
-                    acrescimo: parseInt(matches[1]) || 0,
-                    porQuantidade: 1,
-                    tipo: matches[0].includes("arma") ? "arma" :
-                          matches[0].includes("vitima") || matches[0].includes("vítima") ? "vitima" :
-                          matches[0].includes("orgão") || matches[0].includes("órgão") ? "orgao" : "pessoa"
-                };
-            }
+            regex: /tráfico de drogas \(a partir de (\d+) unidades\).*mais\s+(\d+)(?:\s+mês|\s+meses)?\s+(?:à cada|a cada|para cada|por)\s+(\d+)?\s*unidade/i,
+            processar: (matches) => ({
+                acrescimo: parseInt(matches[2]) || 0,
+                porQuantidade: parseInt(matches[3]) || 1,
+                tipo: "unidade",
+                quantidadeBase: parseInt(matches[1]) || 0
+            })
         },
-        // Mais X meses à cada Y unidades
+        // Mais X mês(es) à cada Y unidades
         {
             regex: /mais\s+(\d+)(?:\s+mês|\s+meses)?\s+(?:à cada|a cada|para cada)\s+(\d+)\s+unidades/i,
-            processar: (matches) => {
-                return {
-                    acrescimo: parseInt(matches[1]) || 0,
-                    porQuantidade: parseInt(matches[2]) || 1,
-                    tipo: "lote"
-                };
-            }
+            processar: (matches) => ({
+                acrescimo: parseInt(matches[1]) || 0,
+                porQuantidade: parseInt(matches[2]) || 1,
+                tipo: "lote" // Pode ser "lote" ou "unidade" dependendo do contexto, mas "lote" é mais seguro
+            })
         },
-        // Mais X mês para cada Y de dinheiro
+        // Mais X mês(es) por arma/vítima/pessoa/órgão
         {
-            regex: /mais\s+(\d+)(?:\s+mês|\s+meses)?\s+(?:para cada|à cada|por)\s+(\d+(?:\.\d+)?)\s+de\s+dinheiro/i,
-            processar: (matches) => {
-                return {
-                    acrescimo: parseInt(matches[1]) || 0,
-                    porQuantidade: parseInt(matches[2].replace(/\./g, "")) || 1,
-                    tipo: "dinheiro"
-                };
-            }
+            regex: /mais\s+(\d+)(?:\s+mês|\s+meses)?\s+(?:por|para cada|à cada)\s+(arma|vitima|pessoa|vítima|orgão|órgão)/i,
+            processar: (matches) => ({
+                acrescimo: parseInt(matches[1]) || 0,
+                porQuantidade: 1,
+                tipo: matches[2].includes("arma") ? "arma" :
+                      matches[2].includes("vitima") || matches[2].includes("vítima") ? "vitima" :
+                      matches[2].includes("orgão") || matches[2].includes("órgão") ? "orgao" : "pessoa"
+            })
+        },
+         // Mais X mês(es) para cada unidade (genérico, menor prioridade)
+        {
+            regex: /mais\s+(\d+)(?:\s+mês|\s+meses)?\s+(?:para cada|à cada|por|a cada)\s+(\d+)?\s*(?:unidade|unidades)?/i,
+            processar: (matches) => ({
+                acrescimo: parseInt(matches[1]) || 0,
+                porQuantidade: parseInt(matches[2]) || 1,
+                tipo: "unidade"
+            })
         }
     ];
 
@@ -138,37 +141,32 @@ function extrairRegraQuantidade(observacoes) {
     for (const padrao of padroes) {
         const matches = obsLower.match(padrao.regex);
         if (matches) {
+            console.log(`Regra extraída para "${observacoes}":`, padrao.processar(matches));
             return padrao.processar(matches);
         }
     }
 
-    // Casos específicos conhecidos
-    if (obsLower.includes("tráfico de drogas") && obsLower.includes("a partir de 6 unidades")) {
-        return {
-            acrescimo: 2,
-            porQuantidade: 1,
-            tipo: "unidade",
-            quantidadeBase: 6
-        };
-    }
-
-    if (obsLower.includes("mais 1 mês para cada 5.000 de dinheiro")) {
-        return {
-            acrescimo: 1,
-            porQuantidade: 5000,
-            tipo: "dinheiro"
-        };
-    }
-
-    // Regra padrão se não conseguir extrair
-    return {
-        acrescimo: 1,
-        porQuantidade: 1,
-        tipo: "unidade"
-    };
+    console.warn(`Não foi possível extrair regra de quantidade para: "${observacoes}"`);
+    // Se nenhuma regra for encontrada, retornar null para evitar cálculos incorretos
+    return null;
 }
 
-// Carregar crimes na lista principal
+// Função auxiliar para ordenar crimes por número do artigo
+function ordenarCrimes(crimes) {
+    return crimes.sort((a, b) => {
+        // Extrair apenas os números do artigo para comparação numérica
+        const numA = parseInt(String(a.num_artigo).replace(/[^0-9]/g, ''), 10);
+        const numB = parseInt(String(b.num_artigo).replace(/[^0-9]/g, ''), 10);
+
+        if (isNaN(numA) && isNaN(numB)) return 0;
+        if (isNaN(numA)) return 1; // Colocar não numéricos no final
+        if (isNaN(numB)) return -1; // Colocar não numéricos no final
+
+        return numA - numB;
+    });
+}
+
+// Carregar crimes na lista principal (REVISADO PARA ORDENAÇÃO)
 function carregarCrimes() {
     const crimesList = document.getElementById("crimes-list");
     crimesList.innerHTML = ""; // Limpar lista principal
@@ -180,131 +178,156 @@ function carregarCrimes() {
     generalHeader.textContent = "Todos os Crimes"; // Texto inicial
     crimesList.appendChild(generalHeader);
 
-    // Criar elementos para cada categoria
-    Object.keys(crimesData.categorias).forEach(categoria => {
-        const crimes = crimesData.crimes[categoria] || [];
-        if (crimes.length === 0) return;
+    // Criar um array com todos os crimes para a categoria "Todos"
+    let todosOsCrimes = [];
+    Object.keys(crimesData.crimes).forEach(categoria => {
+        todosOsCrimes = todosOsCrimes.concat(crimesData.crimes[categoria] || []);
+    });
 
-        // Adicionar crimes da categoria
-        crimes.forEach(crime => {
-            if (!crime.crime || crime.crime === "") return;
+    // Remover duplicados (caso um crime esteja em múltiplas categorias)
+    todosOsCrimes = Array.from(new Map(todosOsCrimes.map(crime => [crime.num_artigo, crime])).values());
 
-            const li = document.createElement("li");
-            li.dataset.categoria = categoria;
-            li.dataset.codigo = crime.codigo;
-            li.dataset.numArtigo = crime.num_artigo;
-            li.dataset.meses = crime.meses;
-            li.dataset.fianca = String(crime.valor_fianca);
+    // Ordenar todos os crimes numericamente
+    todosOsCrimes = ordenarCrimes(todosOsCrimes);
+    console.log("Todos os crimes ordenados:", todosOsCrimes.map(c => c.num_artigo)); // Log para depuração
 
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.id = `crime-${crime.num_artigo}`;
-            checkbox.value = crime.num_artigo; // Usar num_artigo como identificador
-
-            // Verificar se o crime requer campo de quantidade
-            const requerQuantidade = verificarCrimeComQuantidade(crime.observacoes);
-            if (requerQuantidade) {
-                li.dataset.requerQuantidade = "true";
-                const regra = extrairRegraQuantidade(crime.observacoes);
-                if (regra) {
-                    li.dataset.acrescimo = regra.acrescimo;
-                    li.dataset.porQuantidade = regra.porQuantidade;
-                    li.dataset.tipoQuantidade = regra.tipo;
-                    if (regra.quantidadeBase) {
-                        li.dataset.quantidadeBase = regra.quantidadeBase;
-                    }
-                }
-            }
-
-            // Event listener para seleção/deseleção na lista principal
-            checkbox.addEventListener("change", () => {
-                handleCrimeSelectionChange(crime, checkbox.checked, li);
-            });
-
-            const label = document.createElement("label");
-            label.htmlFor = `crime-${crime.num_artigo}`;
-            label.className = "crime-info";
-
-            const title = document.createElement("div");
-            title.className = "crime-title";
-            title.textContent = `${crime.codigo} - ${crime.crime}`;
-
-            const details = document.createElement("div");
-            details.className = "crime-details";
-
-            // Adicionar detalhes do crime
-            let detailsText = `Pena Base: ${crime.meses} meses`; // Incluir meses base
-            if (crime.tempo && crime.tempo !== "0" && crime.tempo !== "-") {
-                detailsText += ` | Tempo: ${crime.tempo}`;
-            }
-            const fiancaDisplay = String(crime.valor_fianca);
-            if (fiancaDisplay && fiancaDisplay !== "0" && fiancaDisplay !== "N/T") {
-                if (detailsText) detailsText += " | ";
-                detailsText += `Fiança: ${fiancaDisplay}`;
-            } else if (fiancaDisplay === "N/T") {
-                 if (detailsText) detailsText += " | ";
-                 detailsText += `Fiança: Inafiançável`;
-            }
-            if (crime.observacoes && crime.observacoes !== "-") {
-                if (detailsText) detailsText += " | ";
-                detailsText += `Obs: ${crime.observacoes}`;
-            }
-            details.textContent = detailsText || "Sem detalhes adicionais";
-
-            label.appendChild(title);
-            label.appendChild(details);
-
-            li.appendChild(checkbox);
-            li.appendChild(label);
-
-            // Adicionar campo de quantidade se necessário
-            if (requerQuantidade) {
-                const quantidadeInputDiv = document.createElement("div");
-                quantidadeInputDiv.className = "quantidade-input";
-                quantidadeInputDiv.style.display = "none"; // Escondido inicialmente
-
-                const input = document.createElement("input");
-                input.type = "number";
-                input.min = "0";
-                input.placeholder = "Quantidade";
-                input.className = "quantidade";
-                input.id = `quantidade-${crime.num_artigo}`;
-
-                let labelText = "Quantidade:";
-                const tipoQuantidade = li.dataset.tipoQuantidade;
-                if (tipoQuantidade === "arma") labelText = "Qtd. armas:";
-                else if (tipoQuantidade === "vitima") labelText = "Qtd. vítimas:";
-                else if (tipoQuantidade === "pessoa") labelText = "Qtd. pessoas:";
-                else if (tipoQuantidade === "dinheiro") labelText = "Qtd. dinheiro:";
-                else if (tipoQuantidade === "orgao") labelText = "Qtd. órgãos:";
-                else if (tipoQuantidade === "lote") labelText = `Qtd. (lotes de ${li.dataset.porQuantidade}):`;
-
-                const inputLabel = document.createElement("label");
-                inputLabel.htmlFor = `quantidade-${crime.num_artigo}`;
-                inputLabel.textContent = labelText;
-
-                input.addEventListener("input", () => {
-                    const quantidade = parseInt(input.value) || 0;
-                    const crimeSelecionado = crimesSelecionados.find(c => c.numArtigo === crime.num_artigo);
-                    if (crimeSelecionado) {
-                        crimeSelecionado.quantidade = quantidade;
-                    }
-                });
-
-                quantidadeInputDiv.appendChild(inputLabel);
-                quantidadeInputDiv.appendChild(input);
-                li.appendChild(quantidadeInputDiv);
-            }
-
-            crimesList.appendChild(li);
-        });
+    // Adicionar todos os crimes ordenados à lista
+    todosOsCrimes.forEach(crime => {
+        if (!crime || !crime.crime || crime.crime === "") return;
+        criarElementoCrime(crime, crimesList, true); // true indica que é para a lista principal
     });
 
     // Inicializar filtro para mostrar todos
     filtrarPorCategoria("todos");
 }
 
-// Manipulador para mudança de seleção de crime (centralizado)
+// Função para criar o elemento LI de um crime (REUTILIZÁVEL)
+function criarElementoCrime(crime, listaDestino, isListaPrincipal) {
+    const li = document.createElement("li");
+    // Encontrar a(s) categoria(s) originais do crime
+    let categoriasOriginais = [];
+    for (const catKey in crimesData.crimes) {
+        if (crimesData.crimes[catKey].some(c => c.num_artigo === crime.num_artigo)) {
+            categoriasOriginais.push(catKey);
+        }
+    }
+    li.dataset.categorias = JSON.stringify(categoriasOriginais); // Armazenar categorias
+    li.dataset.codigo = crime.codigo;
+    li.dataset.numArtigo = crime.num_artigo;
+    li.dataset.meses = crime.meses;
+    li.dataset.fianca = String(crime.valor_fianca);
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    // ID único mesmo se o crime aparecer em múltiplas listas (embora agora centralizado)
+    checkbox.id = `crime-${crime.num_artigo}`;
+    checkbox.value = crime.num_artigo; // Usar num_artigo como identificador
+
+    // Verificar se o crime requer campo de quantidade
+    const requerQuantidade = verificarCrimeComQuantidade(crime.observacoes);
+    if (requerQuantidade) {
+        li.dataset.requerQuantidade = "true";
+        const regra = extrairRegraQuantidade(crime.observacoes);
+        if (regra) {
+            li.dataset.acrescimo = regra.acrescimo;
+            li.dataset.porQuantidade = regra.porQuantidade;
+            li.dataset.tipoQuantidade = regra.tipo;
+            if (regra.quantidadeBase !== undefined) { // Corrigido para verificar undefined
+                li.dataset.quantidadeBase = regra.quantidadeBase;
+            }
+        } else {
+            // Se não extraiu regra, marcar que requer quantidade mas não adicionar dados inválidos
+            console.warn(`Crime ${crime.codigo} requer quantidade, mas regra não foi extraída.`);
+        }
+    }
+
+    // Event listener para seleção/deseleção
+    checkbox.addEventListener("change", () => {
+        handleCrimeSelectionChange(crime, checkbox.checked, li);
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = checkbox.id;
+    label.className = "crime-info";
+
+    const title = document.createElement("div");
+    title.className = "crime-title";
+    title.textContent = `${crime.codigo} - ${crime.crime}`;
+
+    const details = document.createElement("div");
+    details.className = "crime-details";
+
+    // Adicionar detalhes do crime
+    let detailsText = `Pena Base: ${crime.meses} meses`; // Incluir meses base
+    if (crime.tempo && crime.tempo !== "0" && crime.tempo !== "-") {
+        detailsText += ` | Tempo: ${crime.tempo}`;
+    }
+    const fiancaValor = parseInt(crime.valor_fianca);
+    const fiancaDisplay = isNaN(fiancaValor) || fiancaValor === 0 ? crime.valor_fianca : `R$ ${fiancaValor.toLocaleString("pt-BR")}`;
+
+    if (fiancaDisplay && fiancaDisplay !== "0" && fiancaDisplay !== "N/T") {
+        if (detailsText) detailsText += " | ";
+        detailsText += `Fiança: ${fiancaDisplay}`;
+    } else if (fiancaDisplay === "N/T") {
+         if (detailsText) detailsText += " | ";
+         detailsText += `Fiança: Inafiançável`;
+    }
+    if (crime.observacoes && crime.observacoes !== "-") {
+        if (detailsText) detailsText += " | ";
+        detailsText += `Obs: ${crime.observacoes}`;
+    }
+    details.textContent = detailsText || "Sem detalhes adicionais";
+
+    label.appendChild(title);
+    label.appendChild(details);
+
+    li.appendChild(checkbox);
+    li.appendChild(label);
+
+    // Adicionar campo de quantidade se necessário
+    if (requerQuantidade && li.dataset.acrescimo !== undefined) { // Só adiciona se a regra foi extraída
+        const quantidadeInputDiv = document.createElement("div");
+        quantidadeInputDiv.className = "quantidade-input";
+        quantidadeInputDiv.style.display = "none"; // Escondido inicialmente
+
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.placeholder = "Qtd.";
+        input.className = "quantidade";
+        input.id = `quantidade-${crime.num_artigo}`;
+
+        let labelText = "Quantidade:";
+        const tipoQuantidade = li.dataset.tipoQuantidade;
+        if (tipoQuantidade === "arma") labelText = "Qtd. armas:";
+        else if (tipoQuantidade === "vitima") labelText = "Qtd. vítimas:";
+        else if (tipoQuantidade === "pessoa") labelText = "Qtd. pessoas:";
+        else if (tipoQuantidade === "dinheiro") labelText = "Valor (R$):";
+        else if (tipoQuantidade === "orgao") labelText = "Qtd. órgãos:";
+        else if (tipoQuantidade === "lote") labelText = `Qtd. (lotes de ${li.dataset.porQuantidade}):`;
+
+        const inputLabel = document.createElement("label");
+        inputLabel.htmlFor = input.id;
+        inputLabel.textContent = labelText;
+
+        input.addEventListener("input", () => {
+            const quantidade = parseInt(input.value) || 0;
+            const crimeSelecionado = crimesSelecionados.find(c => c.numArtigo === crime.num_artigo);
+            if (crimeSelecionado) {
+                crimeSelecionado.quantidade = quantidade;
+                console.log(`Quantidade atualizada para ${crime.num_artigo}: ${quantidade}`);
+            }
+        });
+
+        quantidadeInputDiv.appendChild(inputLabel);
+        quantidadeInputDiv.appendChild(input);
+        li.appendChild(quantidadeInputDiv);
+    }
+
+    listaDestino.appendChild(li);
+}
+
+// Manipulador para mudança de seleção de crime (REVISADO)
 function handleCrimeSelectionChange(crime, isSelected, listItemElement) {
     const numArtigo = crime.num_artigo;
     const crimeIndex = crimesSelecionados.findIndex(c => c.numArtigo === numArtigo);
@@ -314,35 +337,36 @@ function handleCrimeSelectionChange(crime, isSelected, listItemElement) {
         const crimeSelecionado = {
             codigo: crime.codigo,
             crime: crime.crime,
-            meses: crime.meses,
+            meses: parseInt(crime.meses) || 0, // Garantir que meses seja número
             fianca: String(crime.valor_fianca),
-            numArtigo: numArtigo
+            numArtigo: numArtigo,
+            observacoes: crime.observacoes // Guardar observações originais
         };
 
-        if (listItemElement.dataset.requerQuantidade === "true") {
+        if (listItemElement.dataset.requerQuantidade === "true" && listItemElement.dataset.acrescimo !== undefined) {
             const quantidadeInputDiv = listItemElement.querySelector(".quantidade-input");
             if (quantidadeInputDiv) {
                 quantidadeInputDiv.style.display = "block";
                 crimeSelecionado.requerQuantidade = true;
-                crimeSelecionado.acrescimo = parseInt(listItemElement.dataset.acrescimo) || 0;
-                crimeSelecionado.porQuantidade = parseInt(listItemElement.dataset.porQuantidade) || 1;
+                crimeSelecionado.acrescimo = parseInt(listItemElement.dataset.acrescimo);
+                crimeSelecionado.porQuantidade = parseInt(listItemElement.dataset.porQuantidade);
                 crimeSelecionado.tipoQuantidade = listItemElement.dataset.tipoQuantidade;
-                if (listItemElement.dataset.quantidadeBase) {
+                if (listItemElement.dataset.quantidadeBase !== undefined) {
                     crimeSelecionado.quantidadeBase = parseInt(listItemElement.dataset.quantidadeBase);
                 }
                 // Ler valor inicial do input se já houver
                 const inputField = quantidadeInputDiv.querySelector("input");
-                if (inputField && inputField.value) {
-                    crimeSelecionado.quantidade = parseInt(inputField.value) || 0;
-                }
+                crimeSelecionado.quantidade = inputField && inputField.value ? parseInt(inputField.value) : 0;
+                console.log(`Crime ${numArtigo} adicionado com quantidade inicial: ${crimeSelecionado.quantidade}`);
             }
         }
         crimesSelecionados.push(crimeSelecionado);
         listItemElement.classList.add("selected");
+        console.log("Crime adicionado:", crimeSelecionado);
 
     } else if (!isSelected && crimeIndex > -1) {
         // Remover crime
-        crimesSelecionados.splice(crimeIndex, 1);
+        const removedCrime = crimesSelecionados.splice(crimeIndex, 1)[0];
         listItemElement.classList.remove("selected");
         if (listItemElement.dataset.requerQuantidade === "true") {
             const quantidadeInputDiv = listItemElement.querySelector(".quantidade-input");
@@ -352,13 +376,14 @@ function handleCrimeSelectionChange(crime, isSelected, listItemElement) {
                 if (inputField) inputField.value = ""; // Limpar campo
             }
         }
+        console.log("Crime removido:", removedCrime);
     }
 
     // Atualizar a lista de crimes selecionados na interface
     atualizarListaCrimesSelecionados();
 }
 
-// Atualizar a lista de atenuantes/agravantes selecionados na interface
+// Atualizar a lista de atenuantes/agravantes selecionados na interface (REVISADO)
 function atualizarListaAtenuantesSelecionados() {
     const selectedList = document.getElementById("atenuantes-selecionados-list");
     selectedList.innerHTML = ""; // Limpar lista
@@ -373,20 +398,20 @@ function atualizarListaAtenuantesSelecionados() {
         li.dataset.codigo = atenuante.codigo;
 
         const atenuanteInfoDiv = document.createElement("div");
-        atenuanteInfoDiv.className = "crime-info";
+        atenuanteInfoDiv.className = "crime-info"; // Reutilizar classe
 
         const title = document.createElement("div");
-        title.className = "crime-title";
+        title.className = "crime-title"; // Reutilizar classe
         title.textContent = `${atenuante.codigo} - ${atenuante.descricao}`;
 
         // Botão para remover (desmarcar)
         const removeBtn = document.createElement("button");
-        removeBtn.className = "remove-crime-btn";
+        removeBtn.className = "remove-crime-btn"; // Reutilizar classe
         removeBtn.innerHTML = "&times;"; // Ícone 'x'
         removeBtn.title = "Remover atenuante/agravante";
         removeBtn.onclick = () => {
             // Encontrar o checkbox correspondente na lista principal e desmarcá-lo
-            const mainCheckbox = document.querySelector(`#atenuante-${atenuante.codigo.replace(/\s+|º|\./g, "-").toLowerCase()}`); // CORRIGIDO: Adicionado \. para corresponder à geração de ID
+            const mainCheckbox = document.getElementById(`atenuante-${atenuante.codigo.replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase()}`);
             if (mainCheckbox) {
                 mainCheckbox.checked = false;
                 // Disparar o evento change manualmente para atualizar tudo
@@ -401,7 +426,7 @@ function atualizarListaAtenuantesSelecionados() {
     });
 }
 
-// Atualizar a lista de crimes selecionados na interface
+// Atualizar a lista de crimes selecionados na interface (REVISADO)
 function atualizarListaCrimesSelecionados() {
     const selectedList = document.getElementById("crimes-selecionados-list");
     selectedList.innerHTML = ""; // Limpar lista
@@ -411,7 +436,10 @@ function atualizarListaCrimesSelecionados() {
         return;
     }
 
-    crimesSelecionados.forEach(crime => {
+    // Ordenar crimes selecionados para exibição (opcional, mas bom para consistência)
+    const crimesOrdenadosParaExibicao = ordenarCrimes([...crimesSelecionados]);
+
+    crimesOrdenadosParaExibicao.forEach(crime => {
         const li = document.createElement("li");
         li.dataset.numArtigo = crime.numArtigo;
 
@@ -443,22 +471,24 @@ function atualizarListaCrimesSelecionados() {
         li.appendChild(crimeInfoDiv);
         selectedList.appendChild(li);
     });
-
-    // Nota sobre atenuantes/agravantes: São aplicados globalmente, não por crime individualmente.
-    // A exibição deles aqui poderia ser confusa. Mantidos na seção principal.
 }
 
-// Carregar atenuantes e agravantes
+// Carregar atenuantes e agravantes (REVISADO)
 function carregarAtenuantesAgravantes() {
     const atenuantesList = document.getElementById("atenuantes-list");
     atenuantesList.innerHTML = "";
 
-    crimesData.atenuantes.forEach(item => {
-        if (!item.descricao || item.descricao === "") return;
+    if (!regrasAtenuantesAgravantes || !regrasAtenuantesAgravantes.atenuantes) {
+        console.error("Dados de atenuantes/agravantes não carregados corretamente.");
+        return;
+    }
+
+    regrasAtenuantesAgravantes.atenuantes.forEach(item => {
+        if (!item || !item.descricao || item.descricao === "") return;
 
         const li = document.createElement("li");
         const codigoRegra = item.codigo;
-        const regraTexto = item.reducao || "Regra não encontrada"; // Usar 'reducao' como texto da regra
+        const regraTexto = item.reducao || item.aumento || "Regra não especificada"; // Usar reducao ou aumento
 
         li.dataset.codigo = codigoRegra;
         li.dataset.regra = regraTexto;
@@ -466,62 +496,44 @@ function carregarAtenuantesAgravantes() {
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.id = `atenuante-${codigoRegra.replace(/\s+|º|\./g, "-").toLowerCase()}`;
+        // Gerar ID único e seguro para o DOM
+        const checkboxId = `atenuante-${codigoRegra.replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase()}`;
+        checkbox.id = checkboxId;
         checkbox.dataset.codigo = codigoRegra; // Adicionar data-codigo para fácil acesso
 
         checkbox.addEventListener("change", () => {
-            if (checkbox.checked) {
+            const isChecked = checkbox.checked;
+            const atenuanteIndex = atenuantesAgravantesSelecionados.findIndex(a => a.codigo === codigoRegra);
+
+            if (isChecked && atenuanteIndex === -1) {
                 atenuantesAgravantesSelecionados.push({
                     codigo: codigoRegra,
                     descricao: item.descricao,
                     regra: regraTexto
                 });
+                console.log("Atenuante/Agravante adicionado:", codigoRegra);
 
-                // Lógica especial para AC Nº03 - Adicionar automaticamente o crime ART. 028
+                // Lógica especial para AC Nº03
                 if (codigoRegra === "AC Nº03") {
-                    const crimeDesobediencia = findCrimeByArtigo("028");
-                    if (crimeDesobediencia) {
-                        const jaSelecionado = crimesSelecionados.some(c => c.numArtigo === "028");
-                        if (!jaSelecionado) {
-                            const mainCheckbox = document.getElementById(`crime-028`);
-                            if (mainCheckbox) {
-                                mainCheckbox.checked = true;
-                                mainCheckbox.dispatchEvent(new Event('change'));
-                            }
-                        }
-                    }
+                    adicionarCrimeAutomatico("028", "AC Nº03");
                 }
-                // *** NEW LOGIC FOR RAA Nº08 ***
+                // Lógica especial para RAA Nº08
                 else if (codigoRegra === "RAA Nº08") {
-                    const crimeArt57 = findCrimeByArtigo("057"); // Use existing helper function
-                    if (crimeArt57) {
-                        const crimeCheckbox = document.getElementById(`crime-${crimeArt57.num_artigo}`); // Should be crime-057
-                        if (crimeCheckbox && !crimeCheckbox.checked) {
-                            crimeCheckbox.checked = true;
-                            // Dispatch change event to add crime 057 to selected list and update UI
-                            crimeCheckbox.dispatchEvent(new Event('change'));
-                            mostrarToast("Artigo 57 (Desacato) adicionado automaticamente devido à seleção do RAA Nº08.", "info");
-                        }
-                    } else {
-                         console.warn("Crime com Artigo 057 não encontrado para adicionar automaticamente.");
-                    }
+                    adicionarCrimeAutomatico("057", "RAA Nº08");
                 }
 
-            } else {
-                atenuantesAgravantesSelecionados = atenuantesAgravantesSelecionados.filter(a => a.codigo !== codigoRegra);
+            } else if (!isChecked && atenuanteIndex > -1) {
+                atenuantesAgravantesSelecionados.splice(atenuanteIndex, 1);
+                console.log("Atenuante/Agravante removido:", codigoRegra);
 
-                // Lógica especial para AC Nº03 - Remover automaticamente o crime ART. 028
+                // Lógica especial para AC Nº03
                 if (codigoRegra === "AC Nº03") {
-                    const crimeIndex = crimesSelecionados.findIndex(c => c.numArtigo === "028");
-                    if (crimeIndex > -1) {
-                        const mainCheckbox = document.getElementById(`crime-028`);
-                        if (mainCheckbox) {
-                            mainCheckbox.checked = false;
-                            mainCheckbox.dispatchEvent(new Event('change'));
-                        }
-                    }
+                    removerCrimeAutomatico("028", "AC Nº03");
                 }
-                // *** NO ACTION NEEDED FOR RAA Nº08 UNCHECK ***
+                // Lógica especial para RAA Nº08
+                else if (codigoRegra === "RAA Nº08") {
+                    removerCrimeAutomatico("057", "RAA Nº08");
+                }
             }
 
             atualizarListaAtenuantesSelecionados();
@@ -538,8 +550,59 @@ function carregarAtenuantesAgravantes() {
     });
 }
 
-// Função auxiliar para encontrar um crime pelo número do artigo
+// Função auxiliar para adicionar crime automaticamente
+function adicionarCrimeAutomatico(numArtigo, motivoRegra) {
+    const crime = findCrimeByArtigo(numArtigo);
+    if (crime) {
+        const jaSelecionado = crimesSelecionados.some(c => c.numArtigo === numArtigo);
+        if (!jaSelecionado) {
+            const mainCheckbox = document.getElementById(`crime-${numArtigo}`);
+            if (mainCheckbox) {
+                mainCheckbox.checked = true;
+                mainCheckbox.dispatchEvent(new Event('change'));
+                mostrarToast(`Artigo ${numArtigo} adicionado automaticamente devido à seleção de ${motivoRegra}.`, "info");
+            } else {
+                console.warn(`Checkbox para crime ${numArtigo} não encontrado para adição automática.`);
+            }
+        }
+    } else {
+        console.warn(`Crime com Artigo ${numArtigo} não encontrado para adicionar automaticamente.`);
+    }
+}
+
+// Função auxiliar para remover crime automaticamente (se foi adicionado por regra)
+function removerCrimeAutomatico(numArtigo, motivoRegra) {
+    // Verifica se o crime ainda está selecionado
+    const crimeIndex = crimesSelecionados.findIndex(c => c.numArtigo === numArtigo);
+    if (crimeIndex > -1) {
+        // Verifica se alguma outra regra que adiciona este crime ainda está ativa
+        let outraRegraAtiva = false;
+        if (numArtigo === "028" && atenuantesAgravantesSelecionados.some(a => a.codigo === "AC Nº03")) {
+            // Se AC Nº03 ainda está ativo, não remover 028
+            outraRegraAtiva = true;
+        }
+        if (numArtigo === "057" && atenuantesAgravantesSelecionados.some(a => a.codigo === "RAA Nº08")) {
+            // Se RAA Nº08 ainda está ativo, não remover 057
+            outraRegraAtiva = true;
+        }
+
+        // Remove o crime apenas se nenhuma outra regra que o adiciona estiver ativa
+        if (!outraRegraAtiva) {
+            const mainCheckbox = document.getElementById(`crime-${numArtigo}`);
+            if (mainCheckbox) {
+                mainCheckbox.checked = false;
+                mainCheckbox.dispatchEvent(new Event('change'));
+                mostrarToast(`Artigo ${numArtigo} removido automaticamente pois ${motivoRegra} foi desmarcado.`, "info");
+            } else {
+                 console.warn(`Checkbox para crime ${numArtigo} não encontrado para remoção automática.`);
+            }
+        }
+    }
+}
+
+// Função auxiliar para encontrar um crime pelo número do artigo (REVISADO)
 function findCrimeByArtigo(numArtigo) {
+    if (!crimesData || !crimesData.crimes) return null;
     for (const categoria in crimesData.crimes) {
         const crime = crimesData.crimes[categoria].find(c => c.num_artigo === numArtigo);
         if (crime) return crime;
@@ -547,9 +610,9 @@ function findCrimeByArtigo(numArtigo) {
     return null;
 }
 
-// Filtrar crimes por texto de pesquisa
+// Filtrar crimes por texto de pesquisa (REVISADO)
 function filtrarCrimes() {
-    const searchText = document.getElementById("pesquisar-crimes").value.toLowerCase();
+    const searchText = document.getElementById("pesquisar-crimes").value.toLowerCase().trim();
     const crimeItems = document.querySelectorAll("#crimes-list li");
     const generalHeader = document.getElementById("general-crime-header");
     const activeCategory = document.querySelector(".tab-btn.active").dataset.category;
@@ -557,11 +620,12 @@ function filtrarCrimes() {
     // Filtrar itens
     let visibleItemsCount = 0;
     crimeItems.forEach(item => {
-        const crimeInfo = item.querySelector(".crime-info").textContent.toLowerCase();
-        const itemCategory = item.dataset.categoria;
-        const isVisibleByCategory = (activeCategory === "todos" || itemCategory === activeCategory);
+        const crimeText = item.textContent.toLowerCase();
+        const itemCategorias = JSON.parse(item.dataset.categorias || '[]');
+        const isVisibleByCategory = (activeCategory === "todos" || itemCategorias.includes(activeCategory));
+        const matchesSearch = !searchText || crimeText.includes(searchText);
 
-        if (isVisibleByCategory && crimeInfo.includes(searchText)) {
+        if (isVisibleByCategory && matchesSearch) {
             item.style.display = "flex";
             visibleItemsCount++;
         } else {
@@ -570,102 +634,101 @@ function filtrarCrimes() {
     });
 
     // Mostrar/Ocultar cabeçalho geral
-    if (visibleItemsCount > 0) {
-        generalHeader.style.display = "block";
-    } else {
-        generalHeader.style.display = "none";
-    }
+    generalHeader.style.display = visibleItemsCount > 0 ? "block" : "none";
 
     // Mostrar mensagem se não houver resultados
-    const emptyState = document.querySelector(".empty-state");
+    const container = document.querySelector(".crimes-list-container.main-list");
+    let emptyState = container.querySelector(".empty-state");
     if (visibleItemsCount === 0 && (searchText || activeCategory !== "todos")) {
         if (!emptyState) {
-            const empty = document.createElement("div");
-            empty.className = "empty-state";
-            empty.innerHTML = 	`🔍<p>Nenhum crime encontrado para esta seleção.</p>`; // Emoji
-            document.querySelector(".crimes-list-container.main-list").appendChild(empty);
+            emptyState = document.createElement("div");
+            emptyState.className = "empty-state";
+            emptyState.innerHTML = `🔍<p>Nenhum crime encontrado para "${searchText}" na categoria selecionada.</p>`;
+            container.appendChild(emptyState);
         }
     } else if (emptyState) {
         emptyState.remove();
     }
 }
 
-// Filtrar crimes por categoria e atualizar cabeçalho
+// Filtrar crimes por categoria e atualizar cabeçalho (REVISADO)
 function filtrarPorCategoria(categoria) {
     const crimeItems = document.querySelectorAll("#crimes-list li");
     const generalHeader = document.getElementById("general-crime-header");
 
     // Atualizar texto do cabeçalho geral
-    if (categoria === "todos") {
-        generalHeader.textContent = "Todos os Crimes";
-        crimeItems.forEach(item => {
-            item.style.display = "flex";
-        });
-    } else {
-        generalHeader.textContent = crimesData.categorias[categoria] || "Categoria Desconhecida";
-        crimeItems.forEach(item => {
-            if (item.dataset.categoria === categoria) {
-                item.style.display = "flex";
-            } else {
-                item.style.display = "none";
-            }
-        });
-    }
+    generalHeader.textContent = categoria === "todos" ? "Todos os Crimes" : (crimesData.categorias[categoria] || "Categoria Desconhecida");
 
-    // Aplicar também o filtro de pesquisa
+    // A lógica de exibição agora é controlada principalmente por filtrarCrimes
+    // Apenas reativamos o filtro de texto
     filtrarCrimes();
 }
 
-// Função para extrair percentual da regra (positvo para aumento, negativo para redução)
+// Função para extrair percentual da regra (REVISADO)
 function extrairPercentualRegra(regraTexto) {
+    if (!regraTexto) return 0;
     const textoLower = regraTexto.toLowerCase();
     const match = textoLower.match(/(\d+)%/);
     if (!match) return 0;
 
     const percentual = parseInt(match[1]);
 
-    if (textoLower.includes("aumento")) {
+    if (textoLower.includes("aumento") || textoLower.includes("aumentada")) {
         return percentual;
     } else if (textoLower.includes("redução") || textoLower.includes("diminuída") || textoLower.includes("reduz")) {
         return -percentual;
     } else {
-        return 0; // Se não especifica aumento/redução, não aplicar percentual direto
+        console.warn(`Não foi possível determinar aumento/redução para a regra: "${regraTexto}"`);
+        return 0; // Não aplicar se não for claro
     }
 }
 
-// Função auxiliar para calcular pena base de uma lista de crimes
+// Função auxiliar para calcular pena base de uma lista de crimes (REVISADO)
 function calcularPenaBase(listaCrimes) {
     let mesesBase = 0;
     listaCrimes.forEach(crime => {
         let mesesCrime = parseInt(crime.meses) || 0;
-        if (crime.requerQuantidade && crime.quantidade) {
+        // Aplicar cálculo de quantidade apenas se os dados necessários existirem
+        if (crime.requerQuantidade && crime.quantidade !== undefined && crime.acrescimo !== undefined && crime.porQuantidade !== undefined) {
             let quantidade = parseInt(crime.quantidade) || 0;
-            let acrescimo = parseInt(crime.acrescimo) || 0;
-            let porQuantidade = parseInt(crime.porQuantidade) || 1;
+            let acrescimo = parseInt(crime.acrescimo);
+            let porQuantidade = parseInt(crime.porQuantidade);
             let acrescimoTotal = 0;
-            if (crime.quantidadeBase) {
-                if (quantidade > crime.quantidadeBase) {
-                    const excedente = quantidade - crime.quantidadeBase;
+
+            if (porQuantidade <= 0) {
+                console.error(`Divisão por zero evitada para o crime ${crime.codigo}. porQuantidade é ${porQuantidade}`);
+                porQuantidade = 1; // Evitar divisão por zero
+            }
+
+            if (crime.quantidadeBase !== undefined) {
+                let quantidadeBase = parseInt(crime.quantidadeBase);
+                if (quantidade > quantidadeBase) {
+                    const excedente = quantidade - quantidadeBase;
                     acrescimoTotal = Math.floor(excedente / porQuantidade) * acrescimo;
+                    console.log(`Crime ${crime.codigo}: Qtd=${quantidade}, Base=${quantidadeBase}, Excedente=${excedente}, Acrescimo=${acrescimo}, PorQtd=${porQuantidade}, AcrTotal=${acrescimoTotal}`);
                 }
             } else {
                 acrescimoTotal = Math.floor(quantidade / porQuantidade) * acrescimo;
+                 console.log(`Crime ${crime.codigo}: Qtd=${quantidade}, Acrescimo=${acrescimo}, PorQtd=${porQuantidade}, AcrTotal=${acrescimoTotal}`);
             }
             mesesCrime += acrescimoTotal;
         }
         mesesBase += mesesCrime;
     });
+    console.log("Pena Base Calculada (antes de atenuantes):", mesesBase);
     return mesesBase;
 }
 
-// Calcular a pena (Refatorado para lógica de fiança mista e regra especial Desacato)
+// Calcular a pena (REVISADO E SIMPLIFICADO)
 function calcularPena() {
     // Validar campos obrigatórios
-    const nomeAcusado = document.getElementById("nome-acusado").value;
-    const idAcusado = document.getElementById("id-acusado").value;
-    const nomeResponsavel = document.getElementById("nome-responsavel").value;
-    const idResponsavel = document.getElementById("id-responsavel").value;
-    const auxiliares = document.getElementById("auxiliares").value || "Não informado";
+    const nomeAcusado = document.getElementById("nome-acusado").value.trim();
+    const idAcusado = document.getElementById("id-acusado").value.trim();
+    const nomeResponsavel = document.getElementById("nome-responsavel").value.trim();
+    const idResponsavel = document.getElementById("id-responsavel").value.trim();
+    const auxiliares = document.getElementById("auxiliares").value.trim() || "Não informado";
+    const descricaoQru = document.getElementById("descricao-qru").value.trim() || "Não informado";
+    const fiancaPaga = document.getElementById("fianca-paga").checked;
 
     if (!nomeAcusado || !idAcusado || !nomeResponsavel || !idResponsavel) {
         mostrarToast("Preencha os campos obrigatórios: Nome e ID do Acusado, Nome e ID do Responsável.", "error");
@@ -677,74 +740,69 @@ function calcularPena() {
         return;
     }
 
-    // *** INÍCIO: Regra Especial Desacato ART 57 ***
-    const desacatoArt57Presente = crimesSelecionados.some(crime => crime.numArtigo === "057");
-    let crimesParaCalculo = [...crimesSelecionados]; // Copia para não modificar o original diretamente
     let penaFinal = 0;
     let totalFiancaAfiancaveis = 0;
     let crimesAfiancaveisTexto = "";
     let crimesInafiancaveisTexto = "";
-    let modificadorTotal = 0;
+    let modificadorTotalPercentual = 0;
     let atenuantesAplicadosTexto = "";
-    let valorFianca = 0;
-    let fiancaPaga = false;
+    let valorFiancaCalculado = 0;
+    let penaCumplice = null;
+    let crimesParaCalculo = [...crimesSelecionados]; // Usar cópia
 
+    // *** Regra Especial Desacato ART 57 ***
+    const desacatoArt57Presente = crimesParaCalculo.some(crime => crime.numArtigo === "057");
     if (desacatoArt57Presente) {
-        // Filtrar para manter apenas o Desacato ART 57
-        const crimeDesacato = crimesSelecionados.find(crime => crime.numArtigo === "057");
-        crimesParaCalculo = [crimeDesacato]; // Apenas o desacato será considerado
-
+        const crimeDesacato = crimesParaCalculo.find(crime => crime.numArtigo === "057");
         penaFinal = 120; // Pena máxima fixa
-        totalFiancaAfiancaveis = 0; // Ignorar fiança
-        crimesAfiancaveisTexto = ""; // Nenhum crime afiançável
-        crimesInafiancaveisTexto = `${crimeDesacato.codigo} - ${crimeDesacato.crime}`; // Apenas o desacato
-        modificadorTotal = 0; // Ignorar modificadores
-        atenuantesAplicadosTexto = "Nenhum (Regra Especial Desacato ART 57)"; // Indicar regra especial
-        valorFianca = 0; // Fiança não aplicável
-        fiancaPaga = false; // Fiança não aplicável
-
+        crimesInafiancaveisTexto = `${crimeDesacato.codigo} - ${crimeDesacato.crime}`;
+        atenuantesAplicadosTexto = "Nenhum (Regra Especial Desacato ART 57)";
+        valorFiancaCalculado = 0; // Fiança não aplicável
+        console.log("Aplicando Regra Especial Desacato ART 57");
     } else {
-        // *** Lógica Normal (sem Desacato ART 57 ou se ele não estiver selecionado) ***
+        // *** Lógica Normal ***
 
-        // Separar crimes afiançáveis e inafiançáveis
-        const crimesAfiancaveis = [];
-        const crimesInafiancaveis = [];
-
+        // Separar crimes e calcular fiança base
         crimesParaCalculo.forEach(crime => {
             const fiancaValorStr = crime.fianca;
             const fiancaNumerica = parseInt(fiancaValorStr);
-            const isAfiancavel = !(fiancaValorStr === "N/T" || fiancaValorStr === "0" || fiancaNumerica === 0 || !fiancaValorStr);
+            // Considera afiançável se fianca for número > 0
+            const isAfiancavel = !isNaN(fiancaNumerica) && fiancaNumerica > 0;
 
             let crimeTexto = `${crime.codigo} - ${crime.crime}`;
-            if (crime.requerQuantidade && crime.quantidade) {
+            // Adicionar detalhes de quantidade ao texto se aplicável
+             if (crime.requerQuantidade && crime.quantidade !== undefined && crime.acrescimo !== undefined && crime.porQuantidade !== undefined) {
                 let quantidade = parseInt(crime.quantidade) || 0;
-                let acrescimo = parseInt(crime.acrescimo) || 0;
-                let porQuantidade = parseInt(crime.porQuantidade) || 1;
-                let acrescimoTotal = 0;
-                if (crime.quantidadeBase) {
-                    if (quantidade > crime.quantidadeBase) {
-                        const excedente = quantidade - crime.quantidadeBase;
-                        acrescimoTotal = Math.floor(excedente / porQuantidade) * acrescimo;
+                let acrescimo = parseInt(crime.acrescimo);
+                let porQuantidade = parseInt(crime.porQuantidade);
+                let acrescimoTotalMeses = 0;
+                 if (porQuantidade <= 0) porQuantidade = 1;
+
+                if (crime.quantidadeBase !== undefined) {
+                    let quantidadeBase = parseInt(crime.quantidadeBase);
+                    if (quantidade > quantidadeBase) {
+                        const excedente = quantidade - quantidadeBase;
+                        acrescimoTotalMeses = Math.floor(excedente / porQuantidade) * acrescimo;
                     }
                 } else {
-                    acrescimoTotal = Math.floor(quantidade / porQuantidade) * acrescimo;
+                    acrescimoTotalMeses = Math.floor(quantidade / porQuantidade) * acrescimo;
                 }
-                crimeTexto += ` (${quantidade} unidades, +${acrescimoTotal} meses)`;
+                if (acrescimoTotalMeses > 0) {
+                    crimeTexto += ` (${quantidade} ${crime.tipoQuantidade || 'unid.'}, +${acrescimoTotalMeses} meses)`;
+                }
             }
 
             if (isAfiancavel) {
-                crimesAfiancaveis.push(crime);
+                crimesAfiancaveisTexto += `${crimeTexto}; `;
                 totalFiancaAfiancaveis += fiancaNumerica;
-                crimesAfiancaveisTexto += `${crimeTexto}, `;
             } else {
-                crimesInafiancaveis.push(crime);
-                crimesInafiancaveisTexto += `${crimeTexto}, `;
+                crimesInafiancaveisTexto += `${crimeTexto}; `;
             }
         });
 
-        // Remover vírgula final
-        crimesAfiancaveisTexto = crimesAfiancaveisTexto.replace(/,\s*$/, "");
-        crimesInafiancaveisTexto = crimesInafiancaveisTexto.replace(/,\s*$/, "");
+        // Remover ponto e vírgula final
+        crimesAfiancaveisTexto = crimesAfiancaveisTexto.replace(/;\s*$/, "");
+        crimesInafiancaveisTexto = crimesInafiancaveisTexto.replace(/;\s*$/, "");
 
         // Calcular pena base total
         const penaBaseTotal = calcularPenaBase(crimesParaCalculo);
@@ -752,66 +810,51 @@ function calcularPena() {
         // Calcular modificadores de atenuantes/agravantes
         atenuantesAgravantesSelecionados.forEach(atenuante => {
             const percentual = extrairPercentualRegra(atenuante.regra);
-            modificadorTotal += percentual;
-            atenuantesAplicadosTexto += `${atenuante.codigo} - ${atenuante.descricao}, `;
+            modificadorTotalPercentual += percentual;
+            atenuantesAplicadosTexto += `${atenuante.codigo} (${percentual > 0 ? '+' : ''}${percentual}%); `;
         });
-
-        // Remover vírgula final
-        atenuantesAplicadosTexto = atenuantesAplicadosTexto.replace(/,\s*$/, "");
+        atenuantesAplicadosTexto = atenuantesAplicadosTexto.replace(/;\s*$/, "");
         if (!atenuantesAplicadosTexto) atenuantesAplicadosTexto = "Nenhum";
 
         // Calcular pena final com modificadores
         penaFinal = penaBaseTotal;
-
-        // Verificar se AC Nº02 está selecionado para aplicar pena máxima de 120 meses
-        const acN02Selecionado = atenuantesAgravantesSelecionados.some(atenuante => atenuante.codigo === "AC Nº02");
-
-        if (acN02Selecionado) {
-            // Se AC Nº02 está selecionado, definir pena final como 120 meses independentemente de outros cálculos
-            penaFinal = 120;
-        } else if (modificadorTotal !== 0) {
-            // Caso contrário, aplicar os modificadores normalmente
-            penaFinal = Math.max(0, Math.round(penaBaseTotal * (1 + modificadorTotal / 100)));
+        if (modificadorTotalPercentual !== 0) {
+            penaFinal = Math.max(0, Math.round(penaBaseTotal * (1 + modificadorTotalPercentual / 100)));
+            console.log(`Pena após modificadores (${modificadorTotalPercentual}%): ${penaFinal}`);
         }
 
-        // Garantir que a pena final não exceda 120 meses
-        penaFinal = Math.min(penaFinal, 120);
-
-        // Verificar se a fiança foi paga
-        fiancaPaga = document.getElementById("fianca-paga").checked;
+        // Verificar se AC Nº02 (Réu Primário) está selecionado para aplicar pena máxima de 120 meses
+        const acN02Selecionado = atenuantesAgravantesSelecionados.some(atenuante => atenuante.codigo === "AC Nº02");
+        if (acN02Selecionado) {
+            penaFinal = 120;
+            console.log("Aplicando regra AC Nº02: Pena máxima definida para 120 meses.");
+        } else {
+             // Garantir que a pena final não exceda 120 meses (exceto se AC Nº02 aplicado)
+            penaFinal = Math.min(penaFinal, 120);
+        }
 
         // Calcular valor da fiança (50% do valor total para crimes afiançáveis)
-        valorFianca = Math.round(totalFiancaAfiancaveis * 0.5);
-    }
-    // *** FIM: Regra Especial Desacato ART 57 e Lógica Normal ***
+        valorFiancaCalculado = Math.round(totalFiancaAfiancaveis * 0.5);
 
-    // Gerar texto de crimes cometidos (usando os textos já definidos acima)
-    let crimesCometidosTexto = "";
-    if (crimesAfiancaveisTexto && crimesInafiancaveisTexto) {
-        crimesCometidosTexto = `Afiançáveis: ${crimesAfiancaveisTexto}; Inafiançáveis: ${crimesInafiancaveisTexto}`;
-    } else if (crimesAfiancaveisTexto) {
-        crimesCometidosTexto = `Afiançáveis: ${crimesAfiancaveisTexto}`;
-    } else if (crimesInafiancaveisTexto) {
-        crimesCometidosTexto = `Inafiançáveis: ${crimesInafiancaveisTexto}`;
-    } else {
-        // Caso especial: Apenas Desacato foi selecionado
-        if (desacatoArt57Presente) {
-             const crimeDesacato = crimesSelecionados.find(crime => crime.numArtigo === "057");
-             crimesCometidosTexto = `Inafiançável: ${crimeDesacato.codigo} - ${crimeDesacato.crime}`;
-        } else {
-            crimesCometidosTexto = "Nenhum";
+        // Calcular pena do cúmplice se RAA Nº06 estiver selecionado
+        const raa06Selecionado = atenuantesAgravantesSelecionados.some(atenuante => atenuante.codigo === "RAA Nº06");
+        if (raa06Selecionado) {
+            penaCumplice = Math.round(penaFinal * 0.5);
+            console.log("Calculando pena do cúmplice (RAA Nº06):", penaCumplice);
         }
     }
 
-    // *** NEW: Calculate Accomplice Penalty if RAA Nº06 is selected ***
-    let penaCumplice = null;
-    const raa06Selecionado = atenuantesAgravantesSelecionados.some(atenuante => atenuante.codigo === "RAA Nº06");
-    if (raa06Selecionado) {
-        penaCumplice = Math.round(penaFinal * 0.5);
+    // Gerar texto de crimes cometidos
+    let crimesCometidosTexto = "";
+    if (crimesAfiancaveisTexto && crimesInafiancaveisTexto) {
+        crimesCometidosTexto = `Afiançáveis: ${crimesAfiancaveisTexto}. Inafiançáveis: ${crimesInafiancaveisTexto}.`;
+    } else if (crimesAfiancaveisTexto) {
+        crimesCometidosTexto = `Afiançáveis: ${crimesAfiancaveisTexto}.`;
+    } else if (crimesInafiancaveisTexto) {
+        crimesCometidosTexto = `Inafiançáveis: ${crimesInafiancaveisTexto}.`;
+    } else {
+        crimesCometidosTexto = "Nenhum crime aplicável ao cálculo final (verificar regras especiais).";
     }
-
-    // Obter descrição da QRU
-    const descricaoQru = document.getElementById("descricao-qru").value || "Não informado";
 
     // Atualizar ficha criminal
     const detalhesFicha = document.getElementById("detalhes-ficha");
@@ -821,19 +864,21 @@ function calcularPena() {
         <li>👮 Responsável pela Prisão: ${nomeResponsavel} #${idResponsavel}</li>
         <li>👥 Auxiliares: ${auxiliares}</li>
         <li>📝 Descrição QRU: ${descricaoQru}</li>
+        <hr>
         <li>⚖️ Crimes Cometidos: ${crimesCometidosTexto}</li>
         <li>ℹ️ Atenuantes/Agravantes Aplicados: ${atenuantesAplicadosTexto}</li>
-        <li>🧮 Modificador Total: ${modificadorTotal}%</li>
+        <li>🧮 Modificador Total Aplicado: ${modificadorTotalPercentual}%</li>
+        <hr>
         <li>📅 Pena Final Aplicada: ${penaFinal} meses</li>
         ${penaCumplice !== null ? `<li>🤝 Pena para Cúmplice (RAA Nº06): ${penaCumplice} meses (50% da Pena Final)</li>` : ''}
-        <li>💰 Valor da Fiança (Base): R$ ${valorFianca}</li>
-        <li>❌ Fiança Paga: ${fiancaPaga ? "Sim" : "Não"}</li>
+        <li>💰 Valor da Fiança (Base): R$ ${valorFiancaCalculado.toLocaleString("pt-BR")}</li>
+        <li>${fiancaPaga ? '✅' : '❌'} Fiança Paga: ${fiancaPaga ? "Sim" : "Não"}</li>
     `;
 
     mostrarToast("Pena calculada com sucesso!", "success");
 }
 
-// Copiar resultado para a área de transferência
+// Copiar resultado para a área de transferência (Mantido como estava)
 function copiarResultado() {
     const resultado = document.getElementById("resultado-ficha").innerText;
 
@@ -845,28 +890,39 @@ function copiarResultado() {
             })
             .catch(err => {
                 console.error('Erro ao copiar: ', err);
-                mostrarToast("Erro ao copiar. Tente novamente.", "error");
+                // Tentar fallback antes de mostrar erro
+                copiarResultadoFallback(resultado);
             });
     } else {
-        // Fallback para método mais antigo
-        const textarea = document.createElement('textarea');
-        textarea.value = resultado;
-        document.body.appendChild(textarea);
-        textarea.select();
-
-        try {
-            document.execCommand('copy');
-            mostrarToast("Ficha criminal copiada para a área de transferência!", "success");
-        } catch (err) {
-            console.error('Erro ao copiar: ', err);
-            mostrarToast("Erro ao copiar. Tente novamente.", "error");
-        }
-
-        document.body.removeChild(textarea);
+        copiarResultadoFallback(resultado);
     }
 }
 
-// Limpar resultado e seleções
+// Fallback para copiar resultado
+function copiarResultadoFallback(resultado) {
+    const textarea = document.createElement('textarea');
+    textarea.value = resultado;
+    // Estilizar para não ser visível
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    textarea.style.top = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    textarea.setSelectionRange(0, 99999); // Para dispositivos móveis
+
+    try {
+        document.execCommand('copy');
+        mostrarToast("Ficha criminal copiada para a área de transferência!", "success");
+    } catch (err) {
+        console.error('Erro ao copiar (fallback): ', err);
+        mostrarToast("Erro ao copiar. Por favor, copie manualmente.", "error");
+    }
+
+    document.body.removeChild(textarea);
+}
+
+
+// Limpar resultado e seleções (REVISADO)
 function limparResultado(showToast = true) {
     // Limpar crimes selecionados
     crimesSelecionados = [];
@@ -904,6 +960,7 @@ function limparResultado(showToast = true) {
     document.getElementById("descricao-qru").value = "";
     document.getElementById("fianca-paga").checked = false;
     document.getElementById("char-count").textContent = "0";
+    document.getElementById("pesquisar-crimes").value = ""; // Limpar pesquisa
 
     // Resetar ficha criminal
     const detalhesFicha = document.getElementById("detalhes-ficha");
@@ -913,20 +970,28 @@ function limparResultado(showToast = true) {
         <li>👮 Responsável pela Prisão: Não informado</li>
         <li>👥 Auxiliares: Não informado</li>
         <li>📝 Descrição QRU: Não informado</li>
+        <hr>
         <li>⚖️ Crimes Cometidos: Nenhum</li>
         <li>ℹ️ Atenuantes/Agravantes Aplicados: Nenhum</li>
-        <li>🧮 Modificador Total: 0%</li>
+        <li>🧮 Modificador Total Aplicado: 0%</li>
+        <hr>
         <li>📅 Pena Final Aplicada: 0 meses</li>
         <li>💰 Valor da Fiança (Base): R$ 0</li>
         <li>❌ Fiança Paga: Não</li>
     `;
+
+    // Resetar filtro para "Todos"
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    const todosTab = document.querySelector('.tab-btn[data-category="todos"]');
+    if (todosTab) todosTab.classList.add("active");
+    filtrarPorCategoria("todos");
 
     if (showToast) {
         mostrarToast("Todos os campos foram limpos!", "success");
     }
 }
 
-// Exibir toast de notificação
+// Exibir toast de notificação (Mantido como estava)
 function mostrarToast(mensagem, tipo) {
     const toast = document.createElement("div");
     toast.className = `toast ${tipo}`;
@@ -944,7 +1009,9 @@ function mostrarToast(mensagem, tipo) {
     setTimeout(() => {
         toast.classList.remove("show");
         setTimeout(() => {
-            document.body.removeChild(toast);
+            if (document.body.contains(toast)) { // Verificar se ainda existe antes de remover
+                 document.body.removeChild(toast);
+            }
         }, 300); // Tempo da transição
     }, 3000);
 }
