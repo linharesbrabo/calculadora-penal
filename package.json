@@ -1,0 +1,12 @@
+{
+  "name": "calculadora-penal",
+  "version": "1.0.0",
+  "description": "Calculadora Penal da Polícia Federal",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 8080 --cors"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+} 

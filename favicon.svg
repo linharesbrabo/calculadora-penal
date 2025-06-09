@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fundo dourado -->
+    <rect width="32" height="32" fill="#ffd700"/>
+    
+    <!-- Borda escura -->
+    <rect x="2" y="2" width="28" height="28" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+    
+    <!-- Letra P estilizada -->
+    <text x="16" y="20" font-family="Arial" font-size="20" font-weight="bold" fill="#1a1a1a" text-anchor="middle">P</text>
+</svg> 

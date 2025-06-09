@@ -2,43 +2,43 @@
   "atenuantes": [
     {
       "codigo": "RAA Nº01",
-      "descricao": "Réu Primário",
+      "descricao": "PRESENÇA DE UM ADVOGADO",
       "reducao": "50% DA PENA DIMINUÍDA SE RÉU PRIMÁRIO. SE REINCIDENTE REDUZ A PENA EM 30 %"
     },
     {
       "codigo": "RAA Nº02",
-      "descricao": "Sem Advogado (Redução 10%)",
+      "descricao": "CONFESSAR CRIME",
       "reducao": "10% DA REDUÇÃO DA PENA TOTAL. SEM A PRESENÇA DE UM ADVOGADO"
     },
     {
       "codigo": "RAA Nº03",
-      "descricao": "Sem Advogado (Redução 10%)",
+      "descricao": "RÉU PRIMÁRIO",
       "reducao": "REDUÇÃO DE 10% DA PENA TOTAL. SEM A PRESENÇA DE UM ADVOGADO"
     },
     {
       "codigo": "RAA Nº04",
-      "descricao": "Aumento de 30%",
+      "descricao": "RÉU REINCIDENTE PELO MESMO CRIME",
       "aumento": "AUMENTO DE 30% DA PENA TOTAL"
     },
     {
       "codigo": "RAA Nº05",
-      "descricao": "Aumento de 20%",
+      "descricao": "RÉU REINCIDENTE POR CRIME DIFERENTE",
       "aumento": "AUMENTO DE 20% DA PENA TOTAL"
     },
     {
       "codigo": "RAA Nº06",
-      "descricao": "Cúmplice (50% da pena)",
+      "descricao": "CÚMPLICE",
       "aumento": "SERÁ PRESO POR 50% DA PENA TOTAL DO RÉU"
     },
     {
       "codigo": "RAA Nº07",
-      "descricao": "Aumento de 50%",
+      "descricao": "UTILIZAR VEÍCULO PÚBLICO PARA CRIMES",
       "aumento": "AUMENTO DE 50% DA PENA TOTAL"
     },
     {
       "codigo": "RAA Nº08",
-      "descricao": "Aumento de 50%",
-      "aumento": "AUMENTO DE 50% DA PENA TOTAL"
+      "descricao": "DESACATO",
+      "aumento": "CONVERSÃO DA PENA PARA MÁXIMA"
     },
     {
       "codigo": "AC Nº02",

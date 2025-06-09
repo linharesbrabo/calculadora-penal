@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerar Favicon</title>
+</head>
+<body>
+    <canvas id="canvas" width="32" height="32" style="display:none;"></canvas>
+    <script>
+        // Carregar o SVG
+        fetch('favicon.svg')
+            .then(response => response.text())
+            .then(svgText => {
+                // Criar um blob do SVG
+                const blob = new Blob([svgText], {type: 'image/svg+xml'});
+                const url = URL.createObjectURL(blob);
+                
+                // Carregar o SVG no canvas
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 32, 32);
+                    
+                    // Converter para ICO
+                    const link = document.createElement('link');
+                    link.type = 'image/x-icon';
+                    link.rel = 'shortcut icon';
+                    link.href = canvas.toDataURL('image/x-icon');
+                    document.head.appendChild(link);
+                    
+                    // Limpar
+                    URL.revokeObjectURL(url);
+                };
+                img.src = url;
+            });
+    </script>
+</body>
+</html> 

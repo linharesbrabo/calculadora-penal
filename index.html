@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <title>Calculadora Penal - Polícia Federal</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <!-- FontAwesome removido -->
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -74,8 +82,8 @@
                         <button class="tab-btn" data-category="transito">Trânsito</button>
                         <button class="tab-btn" data-category="paz">Crimes Diversos</button>
                         <button class="tab-btn" data-category="patrimonio">Patrimônio</button>
-                        <button class="tab-btn" data-category="administracao">Tráfico e Posse Ilegal</button>
-                        <button class="tab-btn" data-category="pessoa">Crimes Contra Vida e Liberdade</button>
+                        <button class="tab-btn" data-category="trafico_posse">Tráfico e Posse Ilegal</button>
+                        <button class="tab-btn" data-category="vida_liberdade">Crimes Contra Vida e Liberdade</button>
                         <button class="tab-btn" data-category="desacato_abuso">Desacato e Abuso</button>
                         <button class="tab-btn" data-category="mulher">Contra Mulher</button>
                     </div>

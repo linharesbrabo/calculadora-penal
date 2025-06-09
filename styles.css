@@ -1,15 +1,15 @@
 :root {
-    --primary-color: #003366;
-    --secondary-color: #0056b3;
-    --accent-color: #ffc107;
-    --text-color: #333;
-    --light-text: #fff;
-    --border-color: #ddd;
-    --error-color: #dc3545;
-    --success-color: #28a745;
-    --background-color: #f8f9fa;
-    --card-background: #fff;
-    --hover-color: #e9ecef;
+    --primary-color: #1a1a1a;
+    --secondary-color: #2d2d2d;
+    --accent-color: #ffd700;
+    --text-color: #e0e0e0;
+    --light-text: #ffffff;
+    --border-color: #404040;
+    --error-color: #ff4444;
+    --success-color: #00c853;
+    --background-color: #121212;
+    --card-background: #1e1e1e;
+    --hover-color: #333333;
 }
 
 * {
@@ -34,11 +34,12 @@ body {
 /* Header Styles */
 header {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--light-text);
+    color: var(--accent-color);
     padding: 20px;
     border-radius: 10px 10px 0 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
+    border: 1px solid var(--accent-color);
 }
 
 .logo-container {
@@ -50,6 +51,7 @@ header {
 .logo {
     height: 80px;
     margin-right: 20px;
+    filter: drop-shadow(0 0 5px var(--accent-color));
 }
 
 header h1 {
@@ -58,7 +60,8 @@ header h1 {
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: var(--accent-color);
 }
 
 /* Main Content Styles */
@@ -73,7 +76,8 @@ header h1 {
     background-color: var(--card-background);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
 }
 
 .form-row {
@@ -95,7 +99,7 @@ label {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 input[type="text"],
@@ -106,15 +110,17 @@ textarea {
     border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 1rem;
-    transition: border-color 0.3s;
+    transition: all 0.3s;
+    background-color: var(--primary-color);
+    color: var(--text-color);
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus,
 textarea:focus {
-    border-color: var(--secondary-color);
+    border-color: var(--accent-color);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
 }
 
 textarea {
@@ -149,11 +155,12 @@ textarea {
     background-color: var(--card-background);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
 }
 
 .crimes-section h2 {
-    color: var(--primary-color);
+    color: var(--accent-color);
     margin-bottom: 15px;
     border-bottom: 2px solid var(--accent-color);
     padding-bottom: 10px;
@@ -170,6 +177,8 @@ textarea {
     border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 1rem;
+    background-color: var(--primary-color);
+    color: var(--text-color);
 }
 
 .search-icon {
@@ -201,15 +210,20 @@ textarea {
     font-weight: 600;
     color: #666;
     transition: all 0.3s;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .tab-btn:hover {
     background-color: var(--hover-color);
+    border-color: var(--accent-color);
 }
 
 .tab-btn.active {
-    background-color: var(--primary-color);
-    color: var(--light-text);
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border-color: var(--accent-color);
 }
 
 /* Layout para as listas de crimes */
@@ -237,6 +251,9 @@ textarea {
     flex-wrap: wrap;
     align-items: flex-start;
     transition: background-color 0.3s;
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
 }
 
 .crimes-list li:last-child {
@@ -245,6 +262,7 @@ textarea {
 
 .crimes-list li:hover {
     background-color: var(--hover-color);
+    border-color: var(--accent-color);
 }
 
 .crimes-list li input[type="checkbox"] {
@@ -330,7 +348,7 @@ textarea {
 }
 
 .atenuantes-section h3 {
-    color: var(--primary-color);
+    color: #FFD700;
     margin-bottom: 10px;
 }
 
@@ -379,6 +397,12 @@ textarea {
     width: 100%;
 }
 
+.atenuantes-list li[data-codigo="AC Nº02"] label,
+.atenuantes-list li[data-codigo="AC Nº03"] label {
+    color: #000000;
+    font-weight: bold;
+}
+
 .action-buttons {
     margin-top: 20px;
     display: flex;
@@ -387,23 +411,28 @@ textarea {
 
 /* Resultado Section Styles */
 .resultado-section {
-    background-color: var(--card-background);
-    padding: 20px;
+    background: var(--primary-color);
+    border: 2px solid var(--accent-color);
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    margin-top: 20px;
 }
 
 .resultado-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+    background: var(--secondary-color);
     border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 10px;
+    border-radius: 10px 10px 0 0;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .resultado-header h2 {
-    color: var(--primary-color);
+    color: var(--accent-color);
+    margin: 0;
+    font-size: 1.7rem;
+    letter-spacing: 1px;
 }
 
 .resultado-buttons {
@@ -411,24 +440,55 @@ textarea {
     gap: 10px;
 }
 
-.resultado-content {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 5px;
-    border: 1px solid var(--border-color);
+.resultado-buttons .btn {
+    border: 1.5px solid var(--accent-color);
+    color: var(--accent-color);
+    background: transparent;
+    transition: background 0.2s, color 0.2s;
+}
+
+.resultado-buttons .btn:hover {
+    background: var(--accent-color);
+    color: var(--primary-color);
+}
+
+#resultado-ficha {
+    background: var(--card-background);
+    border-radius: 0 0 10px 10px;
+    padding: 25px 20px 20px 20px;
+    border-top: none;
 }
 
 #detalhes-ficha {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 #detalhes-ficha li {
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border-color);
+    background: var(--primary-color) !important;
+    color: var(--light-text) !important;
+    border: none !important;
+    border-left: 4px solid var(--accent-color) !important;
+    margin-bottom: 10px;
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 
 #detalhes-ficha li:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
+}
+
+#detalhes-ficha hr {
+    border: none;
+    border-top: 1.5px solid var(--accent-color) !important;
+    margin: 18px 0;
+    opacity: 0.7;
 }
 
 /* Button Styles */
@@ -442,24 +502,29 @@ textarea {
     align-items: center;
     justify-content: center;
     transition: all 0.3s;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .primary-btn {
-    background-color: var(--primary-color);
-    color: var(--light-text);
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border: none;
 }
 
 .primary-btn:hover {
-    background-color: var(--secondary-color);
+    background-color: #ffed4a;
 }
 
 .secondary-btn {
-    background-color: var(--accent-color);
-    color: var(--text-color);
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
 }
 
 .secondary-btn:hover {
-    background-color: #e0a800;
+    background-color: var(--hover-color);
 }
 
 /* Footer Styles */
@@ -469,6 +534,10 @@ footer {
     padding: 15px;
     color: #666;
     font-size: 0.9rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+    border: 1px solid var(--accent-color);
 }
 
 /* Responsive Styles */
@@ -491,10 +560,11 @@ footer {
     .logo {
         margin-right: 0;
         margin-bottom: 10px;
+        height: 60px;
     }
     
     header h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
     
     .resultado-header {
@@ -519,20 +589,20 @@ footer {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--primary-color);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--secondary-color);
-    border-radius: 4px;
+    background: var(--accent-color);
+    border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-color);
+    background: #ffed4a;
 }
 
 /* Required Field Indicator */
@@ -562,13 +632,15 @@ label[for="id-responsavel"]::after {
     right: 20px;
     padding: 10px 20px;
     border-radius: 5px;
-    color: var(--light-text);
+    color: var(--text-color);
     font-weight: 600;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     opacity: 0;
     transform: translateY(-20px);
     transition: all 0.3s;
+    background-color: var(--card-background);
+    border: 1px solid var(--accent-color);
 }
 
 .toast.show {
@@ -577,24 +649,24 @@ label[for="id-responsavel"]::after {
 }
 
 .toast.success {
-    background-color: var(--success-color);
+    border-color: var(--success-color);
 }
 
 .toast.error {
-    background-color: var(--error-color);
+    border-color: var(--error-color);
 }
 
 /* Category Headers */
 .category-header {
     padding: 10px 15px;
     background-color: var(--primary-color);
-    color: var(--light-text);
+    color: var(--accent-color);
     font-weight: 600;
     border-radius: 5px 5px 0 0;
-    /* margin-top: 10px; */ /* Removido para o cabeçalho geral */
     position: sticky; /* Fixar cabeçalho no topo da lista */
     top: 0;
     z-index: 10;
+    border: 1px solid var(--accent-color);
 }
 
 .general-header {
@@ -605,11 +677,30 @@ label[for="id-responsavel"]::after {
 .empty-state {
     padding: 20px;
     text-align: center;
-    color: #666;
+    color: var(--text-color);
+    opacity: 0.7;
 }
 
 .empty-state i {
     font-size: 2rem;
     margin-bottom: 10px;
     color: var(--border-color);
+}
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+    accent-color: var(--accent-color);
+}
+
+/* FORÇAR DARK NA FICHA CRIMINAL */
+.resultado-section, #resultado-ficha, #detalhes-ficha li {
+    background: var(--primary-color) !important;
+    color: var(--light-text) !important;
+    border: none !important;
+}
+
+/* Remover o estilo do botão de logout */
+.logout-button,
+.logout-button:hover {
+    display: none;
 }

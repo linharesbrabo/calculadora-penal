@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depuração de Atenuantes/Agravantes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #003366;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .log-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #003d82;
+        }
+    </style>
+</head>
+<body>
+    <h1>Depuração de Atenuantes/Agravantes</h1>
+    
+    <div>
+        <button id="run-debug">Executar Depuração</button>
+        <button id="clear-logs">Limpar Logs</button>
+    </div>
+    
+    <h2>Logs:</h2>
+    <div id="log-output" class="log-container"></div>
+    
+    <h2>Estrutura do JSON:</h2>
+    <pre id="json-structure">Carregando...</pre>
+    
+    <h2>Elementos Renderizados:</h2>
+    <ul id="atenuantes-list"></ul>
+
+    <script>
+        // Redirecionar console.log para nossa interface
+        const logOutput = document.getElementById('log-output');
+        const jsonStructure = document.getElementById('json-structure');
+        
+        // Armazenar referências originais
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+        const originalConsoleWarn = console.warn;
+        
+        // Sobrescrever funções de console
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            appendToLog('log', args);
+        };
+        
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            appendToLog('error', args);
+        };
+        
+        console.warn = function(...args) {
+            originalConsoleWarn.apply(console, args);
+            appendToLog('warn', args);
+        };
+        
+        function appendToLog(type, args) {
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            
+            if (type === 'error') {
+                logEntry.style.color = 'red';
+            } else if (type === 'warn') {
+                logEntry.style.color = 'orange';
+            }
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const message = args.map(arg => {
+                if (typeof arg === 'object') {
+                    return JSON.stringify(arg, null, 2);
+                }
+                return String(arg);
+            }).join(' ');
+            
+            logEntry.textContent = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
+            logOutput.appendChild(logEntry);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        
+        // Função para depurar atenuantes
+        async function debugAtenuantes() {
+            try {
+                console.log("Iniciando depuração de atenuantes/agravantes");
+                
+                console.log("Tentando carregar regras_atenuantes_agravantes.json...");
+                const response = await fetch("regras_atenuantes_agravantes.json");
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log("Dados carregados com sucesso");
+                
+                // Exibir estrutura do JSON
+                jsonStructure.textContent = JSON.stringify(data, null, 2);
+                
+                // Verificar estrutura esperada
+                if (!data.atenuantes) {
+                    console.error("Erro: Propriedade 'atenuantes' não encontrada no JSON");
+                    console.log("Estrutura atual:", Object.keys(data));
+                    return;
+                }
+                
+                console.log(`Encontrados ${data.atenuantes.length} atenuantes/agravantes`);
+                
+                // Verificar elemento de destino
+                const atenuantesList = document.getElementById("atenuantes-list");
+                if (!atenuantesList) {
+                    console.error("Erro: Elemento #atenuantes-list não encontrado no DOM");
+                    return;
+                }
+                
+                console.log("Elemento de destino encontrado, tentando renderizar...");
+                
+                // Limpar lista atual
+                atenuantesList.innerHTML = "";
+                
+                // Renderizar itens
+                data.atenuantes.forEach((item, index) => {
+                    console.log(`Renderizando item ${index}:`, item);
+                    
+                    if (!item || !item.codigo || !item.descricao) {
+                        console.warn(`Item ${index} inválido:`, item);
+                        return;
+                    }
+                    
+                    const li = document.createElement("li");
+                    const codigoRegra = item.codigo;
+                    const regraTexto = item.reducao || item.aumento || "Regra não especificada";
+                    
+                    li.dataset.codigo = codigoRegra;
+                    li.dataset.regra = regraTexto;
+                    li.dataset.descricao = item.descricao;
+                    
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    const checkboxId = `atenuante-${codigoRegra.replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase()}`;
+                    checkbox.id = checkboxId;
+                    
+                    const label = document.createElement("label");
+                    label.htmlFor = checkbox.id;
+                    label.innerHTML = `<strong>${codigoRegra}</strong> - ${item.descricao} <br><small><em>(${regraTexto})</em></small>`;
+                    
+                    li.appendChild(checkbox);
+                    li.appendChild(label);
+                    atenuantesList.appendChild(li);
+                });
+                
+                console.log("Renderização concluída!");
+            } catch (error) {
+                console.error("Erro durante a depuração:", error);
+            }
+        }
+        
+        // Configurar botões
+        document.getElementById('run-debug').addEventListener('click', debugAtenuantes);
+        document.getElementById('clear-logs').addEventListener('click', () => {
+            logOutput.innerHTML = '';
+        });
+        
+        // Executar depuração inicial
+        debugAtenuantes();
+    </script>
+</body>
+</html>
