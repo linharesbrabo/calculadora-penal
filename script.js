@@ -1025,21 +1025,61 @@ async function secureFetch(url, options = {}) {
 
 // Função para copiar resultado com segurança
 function copiarResultado() {
-    const resultado = document.getElementById("resultado-ficha");
-    if (!resultado) return;
+    const detalhesFicha = document.getElementById("detalhes-ficha");
+    const items = detalhesFicha.getElementsByTagName("li");
+    let resultado = "";
 
-    const texto = resultado.innerText;
-    if (!texto) return;
+    for (let item of items) {
+        // Formatar o texto mantendo os emojis
+        let texto = item.textContent.trim();
 
-    // Sanitizar o texto antes de copiar
-    const textoSanitizado = escapeHTML(texto);
+        // Remover os dois pontos após os emojis
+        texto = texto.replace(/([👤🆔👮👥📝⚖️ℹ️🧮📅🤝💰✅❌])\s*:/g, '$1');
 
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(textoSanitizado)
-            .then(() => mostrarToast("Texto copiado com sucesso!", "success"))
-            .catch(() => copiarResultadoFallback(textoSanitizado));
+        // Formatar valores monetários
+        texto = texto.replace(/R\$ (\d+)/g, (match, p1) => {
+            return `R$ ${parseInt(p1).toLocaleString('pt-BR')}`;
+        });
+
+        resultado += texto;
+
+        // Adicionar quebras de linha específicas usando \r\n
+        if (texto.includes("ID do Acusado")) {
+            resultado += "\r\n\r\n";
+        } else if (texto.includes("Responsável pela Prisão")) {
+            resultado += "\r\n\r\n";
+        } else if (texto.includes("Auxiliares")) {
+            resultado += "\r\n\r\n";
+        } else if (texto.includes("Descrição QRU")) {
+            resultado += "\r\n\r\n\r\n";
+        } else if (texto.includes("Crimes Cometidos: Inafiançáveis")) {
+            resultado += "\r\n\r\n";
+        } else if (texto.includes("Atenuantes/Agravantes Aplicados")) {
+            resultado += "\r\n\r\n";
+        } else if (texto.includes("Modificador Total Aplicado")) {
+            resultado += "\r\n\r\n";
+        } else if (texto.includes("Pena Final Aplicada")) {
+            resultado += "\r\n\r\n";
+        } else if (texto.includes("Valor da Fiança")) {
+            resultado += "\r\n\r\n";
+        } else {
+            resultado += "\r\n";
+        }
+    }
+
+    // Usar a API de clipboard moderna
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(resultado)
+            .then(() => {
+                mostrarToast("Ficha criminal copiada para a área de transferência!", "success");
+            })
+            .catch(err => {
+                console.error('Erro ao copiar: ', err);
+                // Tentar fallback antes de mostrar erro
+                copiarResultadoFallback(resultado);
+            });
     } else {
-        copiarResultadoFallback(textoSanitizado);
+        copiarResultadoFallback(resultado);
     }
 }
 
