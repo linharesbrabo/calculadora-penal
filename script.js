@@ -7,7 +7,7 @@ function sanitizeInput(input) {
 function validateInput(input, maxLength = 100) {
     if (!input || typeof input !== 'string') return false;
     if (input.length > maxLength) return false;
-    return /^[a-zA-Z0-9\s\-_.,#]+$/.test(input);
+    return /^[a-zA-ZÀ-ÿ0-9\s\-_.,#!?()@$%&*:;'"\n]+$/u.test(input);
 }
 
 function validateNumber(input) {
